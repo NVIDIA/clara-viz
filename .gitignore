@@ -1,0 +1,13 @@
+.ipynb_checkpoints/
+*.py[cod]
+
+# test files
+**/test.png
+**/test.jpg
+**/video.mp4
+
+# notebooks
+notebooks/HelloWorld.jpg
+notebooks/data/bonsai/*.nhdr
+notebooks/data/bonsai/*.raw
+notebooks/data/pancreas/*.raw
