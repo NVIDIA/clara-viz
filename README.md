@@ -3,6 +3,8 @@
 NVIDIA Clara Viz is a platform for visualization of 2D/3D medical imaging data. It enables building
 applications that leverage powerful volumetric visualization using CUDA-based ray tracing.
 
+<img src="images/rendering.gif" alt="Rendering" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+
 Clara Viz offers a Python Wrapper for rapid experimentation. It also includes a collection of
 visual widgets for performing interactive medical image visualization in Jupyter Lab notebooks.
 
@@ -14,6 +16,10 @@ On Windows, starting with Chrome version 91 (also with Microsoft Edge) the inter
 
 * NVIDIA GPU: Pascal or newer, including Pascal, Volta, Turing and Ampere families
 * NVIDIA driver: 450.36.06+
+
+## Documentation
+
+https://docs.nvidia.com/clara-viz/index.html
 
 ## Quick Start
 
@@ -31,6 +37,28 @@ So for example if you just need the renderer use
 
 ```bash
 $ pip install clara-viz-core
+```
+
+### Use interactive widget in Jupyter Notebook
+
+Install the Jupyter notebook widgets.
+
+```bash
+$ pip install clara-viz-widgets
+```
+
+Start Jupyter Lab, open the notebooks in the `notbooks` folder. Make sure Git LFS is installed when cloning the repo, else the data files are not downloaded correctly and you will see file open errors when using the example notebooks.
+
+```python
+from clara.viz.widgets import Widget
+from clara.viz.core import Renderer
+import numpy as np
+
+# load a RAW CT data file (volume is 512x256x256 voxels)
+input = np.fromfile("CT.raw", dtype=np.int16)
+input = input.reshape((512, 256, 256))
+
+display(Widget(Renderer(input)))
 ```
 
 ### Render CT data from Python
@@ -56,27 +84,22 @@ image = Image.fromarray(rgb_data)
 image.show()
 ```
 
-### Use interactive widget in Jupyter Notebook
+## Use within a Docker container
 
-Install the Jupyter notebook widgets.
-
+Clara Viz requires CUDA, use a `base` container from `https://hub.docker.com/r/nvidia/cuda` for example `nvidia/cuda:11.4.2-base-ubuntu20.04`. By default the CUDA container exposes the `compute` and `utility` capabilities only. Clara Viz additionally needs the `graphics` and `video` capabilites. Therefore the docker container needs to be run with the `NVIDIA_DRIVER_CAPABILITIES` env variable set:
 ```bash
-$ pip install clara-viz-widgets
+$ docker run -it --rm -e NVIDIA_DRIVER_CAPABILITIES=graphics,compute,utility nvidia/cuda:11.4.2-base-ubuntu20.04
 ```
-
-Start Jupyter Lab, open the notebooks in the `notbooks` folder.
-
-```python
-from clara.viz.widgets import Widget
-from clara.viz.core import Renderer
-import numpy as np
-
-# load a RAW CT data file (volume is 512x256x256 voxels)
-input = np.fromfile("CT.raw", dtype=np.int16)
-input = input.reshape((512, 256, 256))
-
-display(Widget(Renderer(input)))
+or add:
 ```
+ENV NVIDIA_DRIVER_CAPABILITIES graphics,video,compute,utility
+```
+to your docker build file.
+See https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html#driver-capabilities for more information.
+
+## WSL (Windows Subsystem for Linux)
+
+Currently Clara Viz won't run under WSL because OptiX is not supported in that environment.
 
 ## Acknowledgments
 
