@@ -31,7 +31,7 @@
                 "y": 0.01636700553238844,
                 "z": 0.03718034025806895
             },
-            "name": "Cinematic",
+            "name": "Perspective",
             "pixelAspectRatio": 1,
             "up": {
                 "x": -0.17679359977678408,
@@ -194,7 +194,7 @@
     "Views": [
         {
             "name": "",
-            "cameraName": "Cinematic",
+            "cameraName": "Perspective",
             "mode": "CINEMATIC"
         }
     ]
