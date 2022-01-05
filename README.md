@@ -47,7 +47,7 @@ Install the Jupyter notebook widgets.
 $ pip install clara-viz-widgets
 ```
 
-Start Jupyter Lab, open the notebooks in the `notbooks` folder. Make sure Git LFS is installed when cloning the repo, else the data files are not downloaded correctly and you will see file open errors when using the example notebooks.
+Start Jupyter Lab, open the notebooks in the `notebooks` folder. Make sure Git LFS is installed when cloning the repo, else the data files are not downloaded correctly and you will see file open errors when using the example notebooks.
 
 ```python
 from clara.viz.widgets import Widget
