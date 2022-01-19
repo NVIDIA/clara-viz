@@ -1,3 +1,14 @@
+# clara-viz 0.1.2 (Jan 19 2022)
+
+## Bug Fixes
+
+* When the renderer is immediately destroyed after creation there is a segmentation fault. This could happen when providing a unsupported data type (e.g. 64 bit floating point values), when creating a temporary object (e.g. in Python `print(Renderer(data)))`) or when the initialization of the Renderer failed. (https://github.com/NVIDIA/clara-viz/issues/7, https://github.com/NVIDIA/clara-viz/issues/8)
+* Widget is not working with Jupyter Notebooks (but with Jupyter Lab) (https://github.com/NVIDIA/clara-viz/issues/9)
+
+## Documentation
+
+* Added missing `video` capability to docker run command
+
 # clara-viz 0.1.1 (Dec 14 2021)
 
 ## Bug Fixes

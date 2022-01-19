@@ -88,7 +88,7 @@ image.show()
 
 Clara Viz requires CUDA, use a `base` container from `https://hub.docker.com/r/nvidia/cuda` for example `nvidia/cuda:11.4.2-base-ubuntu20.04`. By default the CUDA container exposes the `compute` and `utility` capabilities only. Clara Viz additionally needs the `graphics` and `video` capabilites. Therefore the docker container needs to be run with the `NVIDIA_DRIVER_CAPABILITIES` env variable set:
 ```bash
-$ docker run -it --rm -e NVIDIA_DRIVER_CAPABILITIES=graphics,compute,utility nvidia/cuda:11.4.2-base-ubuntu20.04
+$ docker run -it --rm -e NVIDIA_DRIVER_CAPABILITIES=graphics,video,compute,utility nvidia/cuda:11.4.2-base-ubuntu20.04
 ```
 or add:
 ```
