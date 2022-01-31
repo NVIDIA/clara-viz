@@ -1,3 +1,15 @@
+# clara-viz 0.1.3 (Jan 31 2022)
+
+## New
+
+* Support installation of recommended dependencies
+
+## Bug Fixes
+
+* Failed to load data files with ITK when using Clara Train docker image (https://github.com/NVIDIA/clara-viz/issues/12)
+* Rendering is wrong when passing non-contiguous data in (e.g. transposed numpy array)
+* Widget interaction in slice mode not working correctly (https://github.com/NVIDIA/clara-viz/issues/13)
+
 # clara-viz 0.1.2 (Jan 19 2022)
 
 ## Bug Fixes
