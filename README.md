@@ -99,7 +99,7 @@ See https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide
 
 ## Dockerfile 
 
-After building dockerfile and tagging it e.g. claraviz:latest run
+After building the Dockerfile and tagging it e.g. claraviz:latest run or use run_docker.sh
 ```
 docker run \
     -it \
