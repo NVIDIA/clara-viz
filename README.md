@@ -97,6 +97,22 @@ ENV NVIDIA_DRIVER_CAPABILITIES graphics,video,compute,utility
 to your docker build file.
 See https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html#driver-capabilities for more information.
 
+
+After building dockerfile and tagging it e.g. claraviz:latest run
+```
+docker run \
+    -it \
+    --rm \
+    --gpus=all \
+    -p 8888:8888 \
+    --name clara-viz \
+    --volume $(pwd):/home/jovyan/work \
+    --volume "/media/t/Seagate Expansion Drive/UKA/imageData/clara-viz/input/images":/workspace/inputs \ #not necessary
+    --volume "/media/t/Seagate Expansion Drive/UKA/imageData/clara-viz/results":/workspace/results \ #not necessary
+    -e NVIDIA_DRIVER_CAPABILITIES=graphics,video,compute,utility \
+    claraviz:latest
+```
+
 ## WSL (Windows Subsystem for Linux)
 
 Currently Clara Viz won't run under WSL because OptiX is not supported in that environment.
