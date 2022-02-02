@@ -99,17 +99,13 @@ See https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide
 
 ## Dockerfile 
 
-After building the Dockerfile and tagging it e.g. claraviz:latest run or use run_docker.sh
+After building the Dockerfile and tagging it e.g. claraviz:latest run in terminal or use run_docker.sh
 ```
-docker run \
-    -it \
-    --rm \
+docker run -it --rm \
     --gpus=all \
     -p 8888:8888 \
     --name clara-viz \
     --volume $(pwd):/home/jovyan/work \
-    --volume "/media/t/Seagate Expansion Drive/UKA/imageData/clara-viz/input/images":/workspace/inputs \ #not necessary
-    --volume "/media/t/Seagate Expansion Drive/UKA/imageData/clara-viz/results":/workspace/results \ #not necessary
     -e NVIDIA_DRIVER_CAPABILITIES=graphics,video,compute,utility \
     claraviz:latest
 ```
