@@ -97,6 +97,7 @@ ENV NVIDIA_DRIVER_CAPABILITIES graphics,video,compute,utility
 to your docker build file.
 See https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html#driver-capabilities for more information.
 
+## Dockerfile 
 
 After building dockerfile and tagging it e.g. claraviz:latest run
 ```
