@@ -1,17 +1,18 @@
-FROM nvcr.io/nvidia/pytorch:21.12-py3
+FROM nvidia/cuda:11.4.2-base-ubuntu20.04
+#FROM nvcr.io/nvidia/pytorch:21.12-py3
 
-WORKDIR /home/jovyan/work 
+RUN apt update \
+    && apt install -y --no-install-recommends --fix-missing \
+    curl \
+    git
 
-RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
-    # python
-    python3.8 python3-pip python3-setuptools python3-dev
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
 
-RUN rm -rf /var/cache/apt/* /var/lib/apt/lists/* && \
-    apt-get autoremove -y && apt-get clean
-
-RUN pip install clara-viz clara-viz-core clara-viz-widgets
+WORKDIR /home/jovyan/work
+RUN git clone https://github.com/NVIDIA/clara-viz
 
 FROM jupyter/minimal-notebook
 
-RUN git clone https://github.com/NVIDIA/clara-viz
+RUN pip install clara-viz clara-viz-core clara-viz-widgets
+RUN python3 -m pip install itk
 
