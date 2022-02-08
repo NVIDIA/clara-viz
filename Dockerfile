@@ -8,11 +8,13 @@ RUN apt update \
 
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
 
-RUN git clone https://github.com/NVIDIA/clara-viz /home/jovyan/work
+WORKDIR /home/jovyan/work
+RUN git clone https://github.com/NVIDIA/clara-viz
 
-FROM jupyter/minimal-notebook
-
+RUN pip3 install jupyter && pip3 install jupyterlab
 RUN pip install clara-viz clara-viz-core clara-viz-widgets
 RUN python3 -m pip install itk
 
 WORKDIR /home/jovyan/work
+
+ENTRYPOINT ["jupyter", "lab","--ip=0.0.0.0","--allow-root"]
