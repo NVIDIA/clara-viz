@@ -12,7 +12,7 @@ WORKDIR /home/jovyan/work
 RUN git clone https://github.com/NVIDIA/clara-viz
 
 RUN pip3 install jupyter && pip3 install jupyterlab
-RUN pip install clara-viz clara-viz-core clara-viz-widgets
+RUN pip3 install clara-viz clara-viz-core clara-viz-widgets
 RUN python3 -m pip install itk
 
 WORKDIR /home/jovyan/work
