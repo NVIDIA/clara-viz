@@ -12,7 +12,7 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 WORKDIR /home/jovyan/work
 RUN git clone https://github.com/NVIDIA/clara-viz
 
-RUN python3 -m pip install jupyter && python3 install jupyterlab
+RUN python3 -m pip install jupyter && python3 -m pip install jupyterlab
 RUN python3 -m pip install clara-viz clara-viz-core clara-viz-widgets
 RUN python3 -m pip install itk
 
