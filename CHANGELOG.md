@@ -1,3 +1,13 @@
+# clara-viz 0.1.4 (Feb 15 2022)
+
+## Security
+
+* Update Jupyter widget Java code packages to fix vulnerabilities
+
+## Bug Fixes
+
+* Regression - cinematic rendering example throws an error (https://github.com/NVIDIA/clara-viz/issues/16)
+
 # clara-viz 0.1.3 (Jan 31 2022)
 
 ## New
