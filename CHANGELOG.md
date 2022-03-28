@@ -1,3 +1,22 @@
+# clara-viz 0.2.0 (March 29 2022)
+
+## Features
+
+* Add support for rendering multi resolution images used in digital pathology
+
+## Security
+
+* Update Jupyter widget Java code packages to fix vulnerabilities
+
+## Bug Fixes
+
+* Error when using a widget with a renderer using a numpy array (https://github.com/NVIDIA/clara-viz/issues/18)
+
+## Documentation
+
+* Fix typo for `image_type` parameter in the sample code of the readme file
+* Extended documentation, added multi resolution image rendering
+
 # clara-viz 0.1.4 (Feb 15 2022)
 
 ## Security

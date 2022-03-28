@@ -1,9 +1,17 @@
 # Clara Viz
 
-NVIDIA Clara Viz is a platform for visualization of 2D/3D medical imaging data. It enables building
-applications that leverage powerful volumetric visualization using CUDA-based ray tracing.
+NVIDIA Clara Viz is a platform for visualization of 2D/3D medical imaging data. It enables building applications
+that leverage powerful volumetric visualization using CUDA-based ray tracing. It also allows viewing of multi resolution
+images used in digital pathology. 
 
-<img src="images/rendering.gif" alt="Rendering" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+<div style="display: flex; width: 100%; justify-content: center;">
+  <div style="padding: 5px; height: 200px;">
+    <img src="images/rendering.gif" alt="Volume Rendering"/>
+  </div>
+  <div style="padding: 5px; height: 200px;">
+    <img src="images/pathology.gif" alt="Pathology"/>
+ </div>
+</div>
 
 Clara Viz offers a Python Wrapper for rapid experimentation. It also includes a collection of
 visual widgets for performing interactive medical image visualization in Jupyter Lab notebooks.
@@ -76,7 +84,7 @@ input = input.reshape((512, 256, 256))
 renderer = clara.viz.core.Renderer(input)
 
 # render to a raw numpy array
-output = renderer.render_image(1024, 768, image_type=clara.viz.core.RAW_RGB_U8_DEPTH_U8)
+output = renderer.render_image(1024, 768, image_type=clara.viz.core.ImageType.RAW_RGB_U8_DEPTH_U8)
 rgb_data = np.asarray(output)[:, :, :3]
 
 # show with PIL
