@@ -11,3 +11,4 @@ notebooks/HelloWorld.jpg
 notebooks/data/bonsai/*.nhdr
 notebooks/data/bonsai/*.raw
 notebooks/data/pancreas/*.raw
+notebooks/data/OpenSlide/*.tiff
