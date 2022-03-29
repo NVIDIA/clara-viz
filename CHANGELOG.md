@@ -1,3 +1,9 @@
+# clara-viz 0.2.1 (March 29 2022)
+
+## Bug Fixes
+
+* Widget can't be displayed because of version mismatch
+
 # clara-viz 0.2.0 (March 29 2022)
 
 ## Features
