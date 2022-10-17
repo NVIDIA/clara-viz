@@ -2,7 +2,7 @@
 
 NVIDIA Clara Viz is a platform for visualization of 2D/3D medical imaging data. It enables building applications
 that leverage powerful volumetric visualization using CUDA-based ray tracing. It also allows viewing of multi resolution
-images used in digital pathology. 
+images used in digital pathology.
 
 <div style="display: flex; width: 100%; justify-content: center;">
   <div style="padding: 5px; height: 200px;">
@@ -22,6 +22,7 @@ On Windows, starting with Chrome version 91 (also with Microsoft Edge) the inter
 
 ## Requirements
 
+* OS: Linux x86_64
 * NVIDIA GPU: Pascal or newer, including Pascal, Volta, Turing and Ampere families
 * NVIDIA driver: 450.36.06+
 

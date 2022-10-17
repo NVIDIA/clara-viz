@@ -1,3 +1,18 @@
+# clara-viz 0.2.2 (October 17 2022)
+
+## Bug Fixes
+
+* Jupyter notebooks fail with AttributeError: 'Widget' object has no attribute 'on_displayed' (https://github.com/NVIDIA/clara-viz/issues/23)
+
+## Security
+
+* Update Jupyter widget Java code packages to fix vulnerabilities
+
+## Documentation
+
+* pip install fails on Windows machines (https://github.com/NVIDIA/clara-viz/issues/22)
+  * Windows is not supported, added a section on supported OS to readme
+
 # clara-viz 0.2.1 (March 29 2022)
 
 ## Bug Fixes
