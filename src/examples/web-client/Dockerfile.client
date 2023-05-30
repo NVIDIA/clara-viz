@@ -1,0 +1,60 @@
+# Copyright (c) 2019-2023, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+ARG DOCKER_HUB
+FROM ${DOCKER_HUB}node:20
+
+RUN apt-get -qq update && apt-get -qq install -y curl unzip
+
+# get protoc
+RUN ARCH=$(uname -m) && \
+    if [ "${ARCH}" = "aarch64" ]; then ARCH="aarch_64"; fi && \
+    curl -SL https://github.com/protocolbuffers/protobuf/releases/download/v3.20.0-rc1/protoc-3.20.0-rc-1-linux-${ARCH}.zip -o /tmp/protoc.zip && \
+    cd /tmp && \
+    unzip -qq protoc.zip && \
+    cp /tmp/bin/protoc /usr/local/bin/protoc
+
+# get protoc grpc-web plugin
+RUN ARCH=$(uname -m) && \
+    curl -SL https://github.com/grpc/grpc-web/releases/download/1.4.2/protoc-gen-grpc-web-1.4.2-linux-${ARCH} -o /usr/local/bin/protoc-gen-grpc-web && \
+    chmod +x /usr/local/bin/protoc-gen-grpc-web
+
+WORKDIR /package
+
+# add proto files and example files
+COPY ./protos/nvidia nvidia
+COPY ./examples/web-client examples/web-client
+
+# generate protobuf files
+RUN protoc -I=./ \
+    nvidia/claraviz/cinematic/v1/render_server.proto \
+    nvidia/claraviz/core/camera.proto \
+    nvidia/claraviz/core/types.proto \
+    nvidia/claraviz/video/v1/video.proto \
+    --js_out=import_style=commonjs:examples/web-client \
+    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:examples/web-client
+
+WORKDIR /package/examples/web-client
+
+# build and pack the web app
+RUN npm install && \
+    npx webpack && \
+    mkdir -p /var/www/html/dist && \
+    cp index.html /var/www/html && \
+    cp dist/main.js /var/www/html/dist
+
+# start the web server
+EXPOSE 8081
+WORKDIR /var/www/html
+CMD ["python3", "-m", "http.server", "8081"]

@@ -1,0 +1,110 @@
+/*
+ * Copyright (c) 2020-2023, NVIDIA CORPORATION. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+package nvidia.claraviz.image.v1;
+
+option java_package = "com.nvidia.claraviz.image.v1";
+
+// Service to get an rendered image from Render Server.
+// The client uses the `Generate` method to generate an image with the
+// given resolution and image type.
+service Image
+{
+    // Generate an image
+    rpc Generate(GenerateRequest) returns (GenerateResponse) {}
+
+    // Query limits
+    rpc QueryLimits(QueryLimitsRequest) returns (QueryLimitsResponse) {}
+}
+
+// Image type enum
+enum ImageType
+{
+    IMAGE_TYPE_UNKNOWN      = 0; // unknown type (invalid)
+    IMAGE_TYPE_RAW_RGBA_U8  = 1; // RAW uncompressed RGBA unsigned int 8-bit
+    IMAGE_TYPE_JPEG         = 2; // JPEG
+}
+
+// Jpeg parameters
+message JpegParameters
+{
+    // Encode quality
+    // Default: 75
+    // Range: [1, 100]
+    uint32 quality = 1;
+}
+
+// Message sent by the client for the `Generate` method.
+message GenerateRequest
+{
+    // Name of the view to render, optional.
+    // If no name is given the default view is rendered.
+    // Default: ""
+    string view_name = 5;
+
+    // Width of the image
+    // Default: QueryLimitsResponse.min_image_width
+    // Range: ]QueryLimitsResponse.min_image_width,
+    // QueryLimitsResponse.max_image_width]
+    uint32 width = 1;
+
+    // Height of the image
+    // Default: QueryLimitsResponse.min_image_height
+    // Range: ]QueryLimitsResponse.min_image_height,
+    // QueryLimitsResponse.max_image_height]
+    uint32 height = 2;
+
+    // The type of data requested
+    ImageType type = 3;
+
+    // Parameters, which one is used depends on the image type
+    oneof parameters
+    {
+        // Jpeg parameters
+        JpegParameters jpeg = 4;
+    }
+}
+
+// Message returned to the client by the `Generate` method.
+message GenerateResponse
+{
+    // The type of data returned in 'data'
+    ImageType type = 1;
+
+    // Image data
+    bytes data = 2;
+}
+
+// Message sent by the client for the `QueryLimits` method.
+message QueryLimitsRequest {}
+
+// Message returned to the client by the `QueryLimits` method.
+message QueryLimitsResponse
+{
+    // Minimum image width
+    uint32 min_image_width = 1;
+
+    // Minimum image height
+    uint32 min_image_height = 2;
+
+    // Maximum image width
+    uint32 max_image_width = 3;
+
+    // Maximum image height
+    uint32 max_image_height = 4;
+}

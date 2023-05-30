@@ -1,0 +1,11 @@
+--- Configurations/unix-Makefile.tmpl.orig
++++ Configurations/unix-Makefile.tmpl
+@@ -499,7 +499,7 @@
+	@echo "Tests are not supported with your chosen Configure options"
+	@ : {- output_on() if !$disabled{tests}; "" -}
+ 
+-install: install_sw install_ssldirs install_docs
++install: install_sw install_ssldirs
+ 
+ uninstall: uninstall_docs uninstall_sw
+ 

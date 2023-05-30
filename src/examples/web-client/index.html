@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<!--
+Copyright (c) 2019-2023, NVIDIA CORPORATION. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html lang="en">
+
+<head>
+  <script src="./dist/main.js"></script>
+  <meta charset="UTF-8" />
+  <title>ClaraViz webui Example</title>
+</head>
+
+<style>
+  #root {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+  }
+
+  #video_area {
+    flex: 3;
+    min-width: 160px;
+    min-height: 160px;
+    display: grid;
+  }
+
+  .video {
+    width: 100%;
+    height: auto;
+  }
+
+  .interface {
+    flex: 1;
+    margin: 10px;
+    white-space: nowrap;
+    vertical-align: top;
+  }
+
+  #progress_bar {
+    margin: 10px 0;
+    padding: 3px;
+    border: 1px solid #000;
+    font-size: 14px;
+    clear: both;
+    opacity: 0;
+    transition: opacity 1s linear;
+  }
+
+  #progress_bar.loading {
+    opacity: 1.0;
+  }
+
+  #progress_bar .percent {
+    background-color: #99ccff;
+    height: auto;
+    width: 0;
+  }
+
+  #log {
+    width: 100%;
+    height: 10%;
+    overflow: auto;
+  }
+
+  .slider {
+    appearance: none;
+    width: 100%;
+    background: #d3d3d3;
+  }
+
+  .slider:hover {
+    opacity: 1;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    position: relative;
+  }
+
+  .transfer_function {
+    display: grid;
+  }
+</style>
+
+<body>
+  <div id="root">
+    <div id="video_area">
+      <video id="v0" class="video" style="grid-row: 1; grid-column: 1;" autoplay muted></video>
+      <video id="v1" class="video" style="grid-row: 1; grid-column: 2; display: none;" autoplay muted></video>
+      <video id="v2" class="video" style="grid-row: 2; grid-column: 1; display: none;" autoplay muted></video>
+      <video id="v3" class="video" style="grid-row: 2; grid-column: 2; display: none;" autoplay muted></video>
+    </div>
+    <div class="interface">
+      <h2>Clara RenderServer Example</h2>
+      <p>Specify a volume file, select both the .mhd and the .raw file.</p>
+      <input type="file" accept=".mhd,.raw" multiple onchange="onLoadVolumeFile(event)">
+      <div>
+        <input type="checkbox" id="animate" onclick="onToggleAnimation()">
+        <label for="animate"> Animate</label><br>
+        <input type="checkbox" id="multi_view" onclick="onToggleMultiView()">
+        <label for="multi_view"> Multi view</label><br>
+      </div>
+      <input type="range" min="0" max="359" value="0" class="slider" id="angle" oninput="onChangeAngle(event)">
+      <p>Transfer function range</p>
+      <div class="transfer_function">
+        <input type="range" min="0" max="99" value="0" class="slider" style="grid-row: 1; grid-column: 1;" id="tf_min"
+          oninput="onChangeTFMin(event)" />
+        <input type="range" min="1" max="100" value="100" class="slider" style="grid-row: 1; grid-column: 1;"
+          id="tf_max" oninput="onChangeTFMax(event)" />
+      </div>
+      <div id="progress_bar">
+        <div class="percent">0%</div>
+      </div>
+      <textarea id="log"></textarea>
+    </div>
+  </div>
+  <script>start();</script>
+</body>
+
+</html>

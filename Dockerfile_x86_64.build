@@ -1,0 +1,72 @@
+# Copyright (c) 2019-2023, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+ARG DOCKER_HUB=quay.io/
+FROM ${DOCKER_HUB}pypa/manylinux_2_28_x86_64:2023-03-20-098e33d
+
+# Install the Cuda toolkit
+#  - use gcc-10 since gcc-12 is not supported by CUDA 11.4
+RUN dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/cuda-rhel8.repo \
+    && dnf install -y \
+        cuda-minimal-build-11-4 \
+        cuda-driver-devel-11-4 \
+        libnvjpeg-devel-11-4 \
+    && ln -s /usr/local/cuda-11.4 /usr/local/cuda \
+    && dnf install -y gcc-toolset-10-gcc gcc-toolset-10-gcc-c++ \
+    && echo -e "#!/bin/bash\nsource scl_source enable gcc-toolset-10" > /etc/profile.d/enablegcctoolset-10.sh \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
+
+ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+# Install dependencies
+#  * wget: to download packages
+#  * git: used by cmake to clone git projects
+#  * nasm: used by openh264
+#  * libX11-devel: used by 'claravizrenderer-ui' example
+RUN dnf install -y wget git nasm libX11-devel \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
+
+WORKDIR /tmp
+
+# Install git-lfs to be used by cmake
+# We need a system wide installation of git lfs. The install script installs for the current user only, therefore additionally
+# install with '--system'
+RUN mkdir /tmp/git-lfs \
+    && cd /tmp/git-lfs \
+    && ARCH=$(uname -m) \
+    && if [ "${ARCH}" = "aarch64" ]; then GIT_LFS_ARCH="arm64"; else GIT_LFS_ARCH="amd64"; fi \
+    && wget -nv https://github.com/git-lfs/git-lfs/releases/download/v2.6.0/git-lfs-linux-$GIT_LFS_ARCH-v2.6.0.tar.gz \
+    && mkdir -p git-lfs-linux-$GIT_LFS_ARCH-v2.6.0 \
+    && tar xf git-lfs-linux-$GIT_LFS_ARCH-v2.6.0.tar.gz -C git-lfs-linux-$GIT_LFS_ARCH-v2.6.0 \
+    && cd git-lfs-linux-$GIT_LFS_ARCH-v2.6.0 \
+    && ./install.sh \
+    && git lfs install --system \
+    && cd - \
+    && rm -rf /tmp/git-lfs
+
+# use the CUDA gcc-toolset for any command
+ENTRYPOINT [ "scl", "enable", "gcc-toolset-10", "--", "manylinux-entrypoint" ]
+
+# all devices should be visible
+ENV NVIDIA_VISIBLE_DEVICES all
+# set 'compute' driver cap to use Cuda
+# set 'video' driver cap to use the video encoder
+# set 'graphics' driver cap to use OpenGL/EGL
+ENV NVIDIA_DRIVER_CAPABILITIES graphics,video,compute,utility
+
+USER root
+

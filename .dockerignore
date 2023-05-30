@@ -1,0 +1,4 @@
+python/notebooks/*
+**/build
+**/data
+**/node_modules

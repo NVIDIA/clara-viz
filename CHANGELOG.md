@@ -1,3 +1,27 @@
+# clara-viz 0.3.0 (June 22 2023)
+
+## Features
+
+* C++ interface is now public
+* Add support for aarch64 (not for Python wheels)
+* Add support for VR/AR rendering
+  + Camera has stereo mode and left end right eye poses, tangents and gaze directions
+  + Add warped and foveated rendering
+  + Add reprojection
+* Add support for separate depth buffer
+* Add support for alpha channel
+* Add support for near and far depth plane
+* Add support for transforming the volume using a matrix
+
+## Bug Fixes
+
+* Fix tonemap enable, had no effect before (always enabled).
+* AttributeError: module 'itk' has no attribute 'itkSpatialOrientationPython' (https://github.com/NVIDIA/clara-viz/issues/26)
+
+## Security
+
+* Update Jupyter widget Java code packages to fix vulnerability CVE-2022-46175
+
 # clara-viz 0.2.2 (October 17 2022)
 
 ## Bug Fixes

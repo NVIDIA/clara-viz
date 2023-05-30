@@ -1,0 +1,40 @@
+# Copyright (c) 2020-2021, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+version: "3"
+services:
+  renderserver:
+    build:
+      context: ./../../..
+      dockerfile: ./src/examples/volumestreamrenderer/Dockerfile.renderer
+    image: claraviz/volumestream-renderer
+    network_mode: "host"
+    volumes:
+      - "./data:/app/data"
+  envoy:
+    build:
+      context: ./ui/
+      dockerfile: Dockerfile.envoy
+    image: claraviz/volumestream-renderer-envoy
+    depends_on:
+      - renderserver
+    network_mode: "host"
+  web-client:
+    build:
+      context: ./../..
+      dockerfile: ./examples/volumestreamrenderer/ui/Dockerfile.client
+    image: claraviz/volumestream-renderer-web-client
+    depends_on:
+      - envoy
+    network_mode: "host"
