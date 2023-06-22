@@ -1,0 +1,104 @@
+/*
+ * Copyright (c) 2018-2023, NVIDIA CORPORATION. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+package nvidia.claraviz.core;
+
+import "nvidia/claraviz/core/types.proto";
+
+// Message sent by the client for the `Camera` method.
+// Defines the 3D viewing transformation.
+message CameraRequest
+{
+    // Name
+    // Default: ""
+    string name = 6;
+
+    // Position of the eye point, has to be different from 'look_at'
+    // Default: (0.0, 0.0, -1.0)
+    Float3 eye = 1;
+
+    // Position of the reference point, has to be different from 'eye'
+    // Default: (0.0, 0.0, 0.0)
+    Float3 look_at = 2;
+
+    // Direction of the up vector, has to be a unit vector
+    // Default: (0.0, 1.0, 0.0)
+    Float3 up = 3;
+
+    // Field of view angle in degrees, in x direction
+    // Default: 30.0
+    // Range: ]0.0, 180.0[
+    float field_of_view = 4;
+
+    // Pixel aspect ratio, describes how the width of a pixel compares to the height
+    // Default: 1
+    // Range ]0.0, FLOAT_MAX]
+    float pixel_aspect_ratio = 5;
+
+    // Enable stereo rendering.
+    // Default: SWITCH_DISABLE
+    Switch enable_stereo = 7;
+
+    // Left eye pose for stereo rendering.
+    // Default: identity matrix
+    Matrix4x4 left_eye_pose = 8;
+
+    // Right eye pose for stereo rendering.
+    // Default: identity matrix
+    Matrix4x4 right_eye_pose = 9;
+
+    // Left eye gaze direction for stereo rendering, has to be a unit vector.
+    // Determines the position of the high resolution area when using warped rendering.
+    // Default: (0.0, 0.0, 1.0)
+    Float3 left_gaze_direction = 10;
+
+    // Right eye gaze direction for stereo rendering, has to be a unit vector.
+    // Determines the position of the high resolution area when using warped rendering.
+    // Default: (0.0, 0.0, 1.0)
+    Float3 right_gaze_direction = 11;
+
+    // Left eye view tangent in x direction for stereo rendering.
+    // Default: (-1.0, 1.0)
+    Float2 left_tangent_x = 12;
+
+    // Left eye view tangent in y direction for stereo rendering.
+    // Default: (1.0, -1.0)
+    Float2 left_tangent_y = 13;
+
+    // Right eye view tangent in x direction for stereo rendering
+    // Default: (-1.0, 1.0)
+    Float2 right_tangent_x = 14;
+
+    // Right eye view tangent in y direction for stereo rendering
+    // Default: (1.0, -1.0)
+    Float2 right_tangent_y = 15;
+
+    // Distance to the near and far frustum planes.
+    // Default: (0.0, FLOAT_MAX)
+    // Range: ([-FLOAT_MAX, depth_clip.max[, ]depth_clip.min, FLOAT_MAX]
+    Range depth_clip = 16;
+
+    // Distance to the near and far frustum planes.
+    // Default: (0.0, FLOAT_MAX)
+    Range depth_range = 17;
+}
+
+// Message returned to the client by the `Camera` method.
+message CameraResponse
+{
+}

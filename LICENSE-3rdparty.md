@@ -11,6 +11,41 @@ in the repository/distribution.
 
 ---
 
+ExposureRenderer
+- License: BSD-like License
+  - https://github.com/ThomasKroes/exposure-render/blob/f79ed1e608c8ece7f3558507306c1e5698c22fc6/Source/exposurerender.h
+- Copyright: T. Kroes <t.kroes@tudelft.nl>
+
+gRPC
+- License: Apache 2.0 License
+  - https://github.com/grpc/grpc/blob/master/LICENSE
+- Copyright:
+
+gRPC-web
+- License: Apache 2.0 License
+  - https://github.com/grpc/grpc-web/blob/master/LICENSE
+- Copyright:
+
+OpenSSL
+- License: Apache 2.0 License
+  - https://github.com/openssl/openssl/blob/master/LICENSE.txt
+- Copyright:
+
+ThreadPool
+- License: zlib License
+  - https://github.com/progschj/ThreadPool/blob/master/COPYING
+- Copyright: Jakob Progsch, Václav Zeman
+
+OpenH264
+- License: BSD-2-Clause License
+  - https://github.com/cisco/openh264/blob/master/LICENSE
+- Copyright: Cisco Systems
+
+JSON for Modern C++
+- License: MIT License
+  - https://github.com/nlohmann/json/blob/develop/LICENSE.MIT
+- Copyright: Niels Lohmann
+
 ipywidgets
 - License: BSD-like License
   - https://github.com/jupyter-widgets/ipywidgets/blob/master/LICENSE

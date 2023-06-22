@@ -22,7 +22,7 @@ On Windows, starting with Chrome version 91 (also with Microsoft Edge) the inter
 
 ## Requirements
 
-* OS: Linux x86_64
+* OS: Linux x86_64 or aarch64
 * NVIDIA GPU: Pascal or newer, including Pascal, Volta, Turing and Ampere families
 * NVIDIA driver: 450.36.06+
 
@@ -30,72 +30,41 @@ On Windows, starting with Chrome version 91 (also with Microsoft Edge) the inter
 
 https://docs.nvidia.com/clara-viz/index.html
 
-## Quick Start
+## Build
 
-### Installation
+### With docker file
 
-This will install all Clara Viz packages use pip:
-
-```bash
-$ pip install clara-viz
-```
-
-Clara Viz is using namespace packages. The main functionality is implemented in the 'clara-viz-core' package,
-Jupyter Notebook widgets are found in the 'clara-viz-widgets' package.
-So for example if you just need the renderer use
+This is using a docker file to build the binaries. First build the docker file used to compile the code:
 
 ```bash
-$ pip install clara-viz-core
+docker build -t clara_viz_builder_$(uname -m) -f Dockerfile_$(uname -m).build .
 ```
 
-### Use interactive widget in Jupyter Notebook
-
-Install the Jupyter notebook widgets.
+Then start the build process inside the build docker image. Build results are written to the 'build' directory.
 
 ```bash
-$ pip install clara-viz-widgets
+docker run --network host --rm -it -u $(id -u):$(id -g) -v $PWD:/ClaraViz \
+    -w /ClaraViz clara_viz_builder_$(uname -m) ./build.sh -o build_$(uname -m)
 ```
 
-Start Jupyter Lab, open the notebooks in the `notebooks` folder. Make sure Git LFS is installed when cloning the repo, else the data files are not downloaded correctly and you will see file open errors when using the example notebooks.
+### From command line
 
-```python
-from clara.viz.widgets import Widget
-from clara.viz.core import Renderer
-import numpy as np
+#### Dependencies
 
-# load a RAW CT data file (volume is 512x256x256 voxels)
-input = np.fromfile("CT.raw", dtype=np.int16)
-input = input.reshape((512, 256, 256))
+git
+git-lfs
+nasm
+CMake 3.19.1
 
-display(Widget(Renderer(input)))
-```
+#### Build
 
-### Render CT data from Python
-
-```python
-from PIL import Image
-import clara.viz.core
-import numpy as np
-
-# load a RAW CT data file (volume is 512x256x256 voxels)
-input = np.fromfile("CT.raw", dtype=np.int16)
-input = input.reshape((512, 256, 256))
-
-# create the renderer
-renderer = clara.viz.core.Renderer(input)
-
-# render to a raw numpy array
-output = renderer.render_image(1024, 768, image_type=clara.viz.core.ImageType.RAW_RGB_U8_DEPTH_U8)
-rgb_data = np.asarray(output)[:, :, :3]
-
-# show with PIL
-image = Image.fromarray(rgb_data)
-image.show()
+```bash
+./build.sh -o build_$(uname -m)
 ```
 
 ## Use within a Docker container
 
-Clara Viz requires CUDA, use a `base` container from `https://hub.docker.com/r/nvidia/cuda` for example `nvidia/cuda:11.4.2-base-ubuntu20.04`. By default the CUDA container exposes the `compute` and `utility` capabilities only. Clara Viz additionally needs the `graphics` and `video` capabilites. Therefore the docker container needs to be run with the `NVIDIA_DRIVER_CAPABILITIES` env variable set:
+Clara Viz requires CUDA, use a `base` container from `https://hub.docker.com/r/nvidia/cuda` for example `nvidia/cuda:11.4.2-base-ubuntu20.04`. By default the CUDA container exposes the `compute` and `utility` capabilities only. Clara Viz additionally needs the `graphics` and `video` capabilities. Therefore the docker container needs to be run with the `NVIDIA_DRIVER_CAPABILITIES` env variable set:
 ```bash
 $ docker run -it --rm -e NVIDIA_DRIVER_CAPABILITIES=graphics,video,compute,utility nvidia/cuda:11.4.2-base-ubuntu20.04
 ```
@@ -121,4 +90,4 @@ is used in this project.
 
 Apache-2.0 License (see `LICENSE` file).
 
-Copyright (c) 2020-2021, NVIDIA CORPORATION.
+Copyright (c) 2020-2023, NVIDIA CORPORATION.

@@ -1,0 +1,93 @@
+/*
+ * Copyright (c) 2020-2021, NVIDIA CORPORATION. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+package nvidia.claraviz.fetch.v1;
+
+import "nvidia/claraviz/core/types.proto";
+
+option java_package = "com.nvidia.claraviz.fetch.v1";
+
+// Service to get a data from the DatasetService.
+service Fetch
+{
+    // Request to fetch data, returns a stream of responses
+    rpc FetchData(FetchDataRequest) returns (stream FetchDataResponse);
+}
+
+// Fetch data.
+// Send to the DatasetService to fetch data. The DatasetService will
+// reply with one or multiple FetchDataResponses containing the required
+// data.
+message FetchDataRequest
+{
+    // Unique identifier of the array, required
+    nvidia.claraviz.core.Identifier array_id = 1;
+
+    // Level of the data array to fetch the elements from
+    // Default: 0
+    // Range: [0, max_configured_levels[
+    uint32 level = 2;
+
+    // Offset in the data array to fetch the elements from. If the data array has more dimensions than
+    // offset values specified, the missing values are assumed to be zero.
+    // Default: (0,0,...)
+    // Range: [(0, 0, ...), array_size - data_size]
+    repeated uint32 offset = 3;
+
+    // Number of elements to fetch, required. If the data array has more dimensions than
+    // size values specified, the missing values are assumed to be one.
+    // Range: [(1, 1, ...), array_size - offset]
+    repeated uint32 size = 4;
+}
+
+// Returned data
+message FetchDataResponse
+{
+    // Unique identifier of the array.
+    nvidia.claraviz.core.Identifier array_id = 1;
+
+    // Level of the data array to store the elements to.
+    uint32 level = 2;
+
+    // Offset in the data array to store the elements to.
+    repeated uint32 offset = 3;
+
+    // Number of elements to store.
+    repeated uint32 size = 4;
+
+    // Definition of a shared memory allocation
+    message SharedMemory
+    {
+        // SharedMemory context UUID.
+        nvidia.claraviz.core.Identifier context_id = 1;
+
+        // SharedMemory allocation UUID.
+        nvidia.claraviz.core.Identifier allocation_id = 2;
+    }
+
+    // The data to be set, 'size * elements_size' bytes.
+    // Data can either be part of the message or an SharedMemory allocation definition containing the data.
+    oneof parameters
+    {
+        // Element data as part of the request
+        bytes data = 5;
+
+        // SharedMemory allocation definiation. If this is set then data is transferred through shared memory.
+        SharedMemory sharedmemory = 6;
+    }
+}

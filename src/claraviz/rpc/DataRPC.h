@@ -1,0 +1,142 @@
+/*
+ * Copyright (c) 2019-2022, NVIDIA CORPORATION. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#pragma once
+
+#include <memory>
+
+#include <nvrpc/Context.h>
+#include <nvrpc/Resources.h>
+#include <claraviz/rpc/ServerRPC.h>
+
+#include <nvidia/claraviz/cinematic/v1/render_server.grpc.pb.h>
+
+#include "claraviz/interface/DataInterface.h"
+
+namespace clara::viz
+{
+
+namespace detail
+{
+
+class DataConfigContext;
+
+/**
+ * RPC resource
+ */
+class DataConfigResource : public nvrpc::Resources
+{
+public:
+    DataConfigResource(DataConfigInterface &data_config);
+    DataConfigResource() = delete;
+
+    friend DataConfigContext;
+
+private:
+    struct Impl;
+    std::shared_ptr<Impl> impl_;
+};
+
+/**
+ * RPC call context
+ */
+class DataConfigContext final
+    : public nvrpc::ContextUnary<nvidia::claraviz::cinematic::v1::DataConfigRequest,
+                                 nvidia::claraviz::cinematic::v1::DataConfigResponse, DataConfigResource>
+{
+    void ExecuteRPC(nvidia::claraviz::cinematic::v1::DataConfigRequest &request,
+                    nvidia::claraviz::cinematic::v1::DataConfigResponse &response) final;
+};
+
+/**
+ * RPC resource
+ */
+class DataResource : public nvrpc::Resources
+{
+public:
+    DataResource(const std::shared_ptr<DataInterface> &data)
+        : data_(data)
+    {
+    }
+    DataResource() = delete;
+
+    std::weak_ptr<DataInterface> data_;
+};
+
+/**
+ * RPC call context
+ */
+class DataContext final
+    : public nvrpc::ContextUnary<nvidia::claraviz::cinematic::v1::DataRequest, nvidia::claraviz::cinematic::v1::DataResponse,
+                                 DataResource>
+{
+    void ExecuteRPC(nvidia::claraviz::cinematic::v1::DataRequest &request,
+                    nvidia::claraviz::cinematic::v1::DataResponse &response) final;
+};
+
+/**
+ * RPC resource
+ */
+class DataHistogramResource : public nvrpc::Resources
+{
+public:
+    DataHistogramResource(const std::shared_ptr<DataHistogramInterface> &histogram)
+        : histogram_(histogram)
+    {
+    }
+    DataHistogramResource() = delete;
+
+    std::weak_ptr<DataHistogramInterface> histogram_;
+};
+
+/**
+ * RPC call context
+ */
+class DataHistogramContext final
+    : public nvrpc::ContextUnary<nvidia::claraviz::cinematic::v1::DataHistogramRequest,
+                                 nvidia::claraviz::cinematic::v1::DataHistogramResponse, DataHistogramResource>
+{
+    void ExecuteRPC(nvidia::claraviz::cinematic::v1::DataHistogramRequest &request,
+                    nvidia::claraviz::cinematic::v1::DataHistogramResponse &response) final;
+};
+
+} // namespace detail
+
+/**
+ * Register the RPC for the DataConfig/Data/Histogram class
+ *
+ * @tparam SERVICE_TYPE        gRPC service type (class type from 'service SomeService' defined in the proto file)
+ *
+ * @param rpc_server [in] server to register the RPC with
+ * @param service [in] service to register the RPC with
+ * @param data_config [in] DataConfig interface class object used by the RPC
+ * @param data [in] Data interface class object used by the RPC
+ * @param histogram [in] Histogram interface class object used by the RPC
+ */
+template<typename SERVICE_TYPE>
+void RegisterRPC(const std::shared_ptr<ServerRPC> &rpc_server, nvrpc::IService *service,
+                 DataConfigInterface &data_config, const std::shared_ptr<DataInterface> &data,
+                 const std::shared_ptr<DataHistogramInterface> &histogram)
+{
+    rpc_server->RegisterRPC<SERVICE_TYPE, detail::DataConfigContext>(
+        service, std::make_shared<detail::DataConfigResource>(data_config), &SERVICE_TYPE::RequestDataConfig);
+    rpc_server->RegisterRPC<SERVICE_TYPE, detail::DataContext>(service, std::make_shared<detail::DataResource>(data),
+                                                               &SERVICE_TYPE::RequestData);
+    rpc_server->RegisterRPC<SERVICE_TYPE, detail::DataHistogramContext>(
+        service, std::make_shared<detail::DataHistogramResource>(histogram), &SERVICE_TYPE::RequestDataHistogram);
+}
+
+} // namespace clara::viz

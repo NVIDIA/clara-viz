@@ -1,0 +1,65 @@
+# Copyright (c) 2019-2023, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+ARG DOCKER_HUB
+FROM ${DOCKER_HUB}nvidia/cuda:11.2.0-devel-ubuntu18.04
+
+# install dependencies
+#  * wget, ca-certificates: to download packages
+#  * build-essential: for building code
+#  * git: used by cmake to clone git projects
+#  * nasm: used by openh264
+#  * libx11-dev: used by 'claravizrenderer-ui' example
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        wget ca-certificates build-essential git nasm libx11-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install git-lfs to be used by cmake
+# We need a system wide installation of git lfs. The install script installs for the current user only, therefore additionally
+# install with '--system'
+RUN mkdir /tmp/git-lfs \
+    && cd /tmp/git-lfs \
+    && ARCH=$(uname -m) \
+    && if [ "${ARCH}" = "aarch64" ]; then GIT_LFS_ARCH="arm64"; else GIT_LFS_ARCH="amd64"; fi \
+    && wget -nv https://github.com/git-lfs/git-lfs/releases/download/v2.6.0/git-lfs-linux-$GIT_LFS_ARCH-v2.6.0.tar.gz \
+    && mkdir -p git-lfs-linux-$GIT_LFS_ARCH-v2.6.0 \
+    && tar xf git-lfs-linux-$GIT_LFS_ARCH-v2.6.0.tar.gz -C git-lfs-linux-$GIT_LFS_ARCH-v2.6.0 \
+    && cd git-lfs-linux-$GIT_LFS_ARCH-v2.6.0 \
+    && ./install.sh \
+    && git lfs install --system \
+    && cd - \
+    && rm -rf /tmp/git-lfs
+
+# Install cmake
+ARG CMAKE_VERSION="3.21.0"
+RUN mkdir /tmp/cmake \
+    && cd /tmp/cmake \
+    && ARCH=$(uname -m) \
+    && wget -nv https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-linux-$ARCH.tar.gz \
+    && tar xf cmake-$CMAKE_VERSION-linux-$ARCH.tar.gz \
+    && cp -r cmake-$CMAKE_VERSION-linux-$ARCH/bin/* /usr/local/bin/ \
+    && cp -r cmake-$CMAKE_VERSION-linux-$ARCH/share/* /usr/local/share/ \
+    && cd - \
+    && rm -rf /tmp/cmake
+
+# all devices should be visible
+ENV NVIDIA_VISIBLE_DEVICES all
+# set 'compute' driver cap to use Cuda
+# set 'video' driver cap to use the video encoder
+# set 'graphics' driver cap to use OpenGL/EGL
+ENV NVIDIA_DRIVER_CAPABILITIES graphics,video,compute,utility
+
+USER root

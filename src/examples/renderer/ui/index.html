@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<!--
+Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Clara RenderServer Example</title>
+  </head>
+  <body>
+    <div style="display: table; height: 100vh">
+      <div style="display: table-row">
+        <div id="v_div" style="display: table-cell; width: 100%">
+          <video
+            id="v"
+            autoplay
+            muted
+            style="width: 100%; height: 100%"
+          ></video>
+        </div>
+        <div
+          style="display: table-cell; white-space: nowrap; vertical-align: top"
+        >
+          <h2>Clara RenderServer Example</h2>
+          <p>Press the button to toggle the animation.</p>
+          <button onclick="toggleAnimation()">Animate</button>
+        </div>
+      </div>
+    </div>
+    <script src="./dist/main.js"></script>
+  </body>
+</html>

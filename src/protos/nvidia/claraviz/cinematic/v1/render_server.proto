@@ -1,0 +1,819 @@
+/*
+ * Copyright (c) 2018-2023, NVIDIA CORPORATION. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+package nvidia.claraviz.cinematic.v1;
+
+import "nvidia/claraviz/core/camera.proto";
+import "nvidia/claraviz/core/types.proto";
+
+option java_package = "com.nvidia.claraviz.cinematic.v1";
+
+// Service that implements the Cinematic Render Server.
+service RenderServer
+{
+    // Configures the data to visualize
+    rpc DataConfig(DataConfigRequest) returns (DataConfigResponse) {}
+    // Sets the data content
+    rpc Data(DataRequest) returns (DataResponse) {}
+
+    // Get the histogram of the data
+    rpc DataHistogram(DataHistogramRequest) returns (DataHistogramResponse) {}
+
+    // Defines a cube containing the data to be visualized
+    rpc DataCrop(DataCropRequest) returns (DataCropResponse) {}
+
+    // Defines the transformation of the spatial dimensions ('X', 'Y', 'Z') of data.
+    rpc DataTransform(DataTransformRequest) returns (DataTransformResponse) {}
+
+    // Sets the 3D viewing transformation
+    rpc Camera(nvidia.claraviz.core.CameraRequest) returns (nvidia.claraviz.core.CameraResponse) {}
+
+    // Sets the camera aperture and focus
+    rpc CameraAperture(CameraApertureRequest) returns (CameraApertureResponse) {}
+
+    // Sets the 2D data view
+    rpc DataView(DataViewRequest) returns (DataViewResponse) {}
+
+    // Configures lights
+    rpc Light(LightRequest) returns (LightResponse) {}
+    // Configures the background light
+    rpc BackgroundLight(BackgroundLightRequest) returns (BackgroundLightResponse) {}
+
+    // Configures the transfer function
+    rpc TransferFunction(TransferFunctionRequest) returns (TransferFunctionResponse) {}
+
+    // Post process tone mapping
+    // The algorithm is using exponential tone mapping by applying '1 - exp2(-(value / exposure))'
+    // to each pixel of the output image.
+    rpc PostProcessTonemap(PostProcessTonemapRequest) returns (PostProcessTonemapResponse) {}
+
+    // Post process denoising
+    rpc PostProcessDenoise(PostProcessDenoiseRequest) returns (PostProcessDenoiseResponse) {}
+
+    // Render settings
+    rpc RenderSettings(RenderSettingsRequest) returns (RenderSettingsResponse) {}
+
+    // View settings
+    rpc View(ViewRequest) returns (ViewResponse) {}
+
+    // Query limits
+    rpc QueryLimits(QueryLimitsRequest) returns (QueryLimitsResponse) {}
+
+    // Reset selected properties to default
+    rpc Reset(ResetRequest) returns (ResetResponse) {}
+}
+
+// Message sent by the client for the `DataConfig` method.
+// Configures the data to visualize, the data organization, the data size and the element size.
+// The data can be specify with the `Data` method.
+// If the data required to visualize is not set then the Render Server will fetch the data through the
+// 'FetchData' interface from the gRPC server given by the 'fetch_uri' URI.
+message DataConfigRequest
+{
+    // Describes an data array
+    message Array
+    {
+        // Unique identifier of the array, required
+        nvidia.claraviz.core.Identifier id = 1;
+
+        // A string defining the data organization and format, required.
+        // Each character defines a dimension starting with the fastest varying axis
+        // and ending with the slowest varying axis. For example a 2D color image
+        // is defined as 'CXY', a time sequence of density volumes is defined as
+        // 'DXYZT'.
+        // Each character can occur only once. Either one of the data element definition
+        // characters 'C', 'D' or 'M' and the 'X' axis definition has to be present.
+        // - 'X': width
+        // - 'Y': height
+        // - 'Z': depth
+        // - 'T': time
+        // - 'I': sequence
+        // - 'C': RGB(A) color
+        // - 'D': density
+        // - 'M': mask
+        string dimension_order = 2;
+
+        // Element type enum
+        enum ElementType
+        {
+            ELEMENT_TYPE_UNKNOWN = 0; // unknown type (invalid)
+            INT8                 = 1; // 8 bit signed (density only)
+            UINT8                = 2; // 8 bit unsigned
+            INT16                = 3; // 16 bit signed (density only)
+            UINT16               = 4; // 16 bit unsigned
+            INT32                = 5; // 32 bit signed (density only)
+            UINT32               = 6; // 32 bit unsigned
+            HALF_FLOAT           = 7; // 16 bit floating point (density only)
+            FLOAT                = 8; // 32 bit floating point (density only)
+        }
+
+        // Defines the element type of the data.
+        ElementType element_type = 3;
+
+        // Defines an array level.
+        message Level
+        {
+            // Number of elements in each dimension, the order is defined by 'dimension_order' field.
+            // For example a 2D RGB color image with a width of 1024 and a height of 768 pixels has a size
+            // of (3, 1024, 768). A 30 frame time sequence of a density volume with width 128, height 256
+            // and depth 64 has a size of (1, 128, 256, 64, 30).
+            // Range: ](0, 0, ...), QueryLimitsResponse.max_array_size]
+            repeated uint32 size = 1;
+
+            // Physical size of each element, the order is defined by the 'dimension_order' field. For
+            // elements which have no physical size like 'M' or 'T' the corresponding value is 1.0.
+            // Default: (1.0, 1.0, ...)
+            // Range: ](0.0, 0.0, ...), (FLOAT_MAX, FLOAT_MAX, ...)]
+            repeated float element_size = 2;
+
+            // Optional range of the values contained in the level, if this is not set then the range is calculated form the data.
+            // One min/max pair for each element component, e.g. for RGB data where 'size[0]' is '3', 'element_range' contains
+            // three 'Vector2f' values.
+            // Default empty
+            repeated nvidia.claraviz.core.Range element_range = 3;
+        }
+
+        // Array levels. Most arrays have only one level, for multi-resolution arrays
+        // there can be multiple levels defining down-scaled representations
+        // of the data.
+        repeated Level levels = 4;
+
+        // Permutes the given data axes, e.g. to swap x and y of a 3-dimensional
+        // density array specify (0, 2, 1, 3)
+        // Default: (0, 1, ...)
+        repeated uint32 permute_axes = 5;
+
+        // Flips the given axes
+        // Default (false, false, ...)
+        repeated bool flip_axes = 6;
+    }
+
+    // Array of data arrays, required
+    repeated Array arrays = 1;
+
+    // gRPC server to fetch data from, the server needs to support the 'FetchData' method.
+    // Default: ''
+    string fetch_uri = 2;
+
+    // SharedMemory driver UUID. If this is set then data might be transfered using shared
+    // memory. See the 'sharedmemory_allocation_id' fields of 'DriverRequest' and 'FetchResponse'.
+    // Default: ''
+    nvidia.claraviz.core.Identifier sharedmemory_driver_id = 3;
+
+    // If set to SWITCH_ENABLE then performance is optimized for the streaming data use case, which means that data is
+    // constantly updated. This might result in higher memory usage.
+    // Else it's expected that data is only specified once or rarely.
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch streaming = 4;
+}
+
+// Message returned to the client by the `DataConfig` method.
+message DataConfigResponse {}
+
+// Message sent by the client for the `Data` method.
+// The data can be partially specified and updated on the fly.
+message DataRequest
+{
+    // Unique identifier of the array, required
+    nvidia.claraviz.core.Identifier array_id = 1;
+
+    // Level of the data array to store the elements to
+    // Default: 0
+    // Range: [0, max_configured_levels[
+    uint32 level = 2;
+
+    // Offset in the data array to store the elements to. If the data array has more dimensions than
+    // offset values specified, the missing values are assumed to be zero.
+    // Default: (0,0,...)
+    // Range: [(0, 0, ...), array_size - data_size]
+    repeated uint32 offset = 3;
+
+    // Number of elements to store, required. If the data array has more dimensions than
+    // size values specified, the missing values are assumed to be zero.
+    // Range: [(1, 1, ...), array_size - offset]
+    repeated uint32 size = 4;
+
+    // The data to be set, 'size * elements_size' bytes.
+    // Data can either be part of the message or an SharedMemory allocation UUID containing the data can
+    // be specified.
+    oneof parameters
+    {
+        // Element data as part of the request
+        bytes data = 5;
+
+        // SharedMemory allocation UUID. If this is set then data is transferred through shared memory.
+        nvidia.claraviz.core.Identifier sharedmemory_allocation_id = 6;
+    }
+}
+
+// Message returned to the client by the `Data` method.
+message DataResponse {}
+
+// Message sent by the client for the `DataHistogram` method.
+message DataHistogramRequest
+{
+    // Unique identifier of the array to get the histogram data from, required
+    nvidia.claraviz.core.Identifier array_id = 1;
+}
+
+// Message returned to the client by the `DataHistogram` method.
+message DataHistogramResponse
+{
+    // Histogram data of the data array. It is empty if the data array is not fully defined.
+    // Values are in normalized natural logarithmic scale.
+    repeated float data = 1;
+}
+
+// Message sent by the client for the `DataCrop` method.
+// Defines the limits containing the data to be included. The limits are aligned to the axes of the data array.
+// The limits are defined by the coordinates of the opposite corners.
+message DataCropRequest
+{
+    // Array of limits for each dimension. Dimension order as defined by the DataConfig interface.
+    // Default: [(0.0, 1.0), ...]
+    // Range: ([0.0, limits.max[, ]limits.min, 1.0])
+    repeated nvidia.claraviz.core.Range limits = 1;
+}
+
+// Message returned to the client by the `DataCrop` method.
+message DataCropResponse {}
+
+// Message sent by the client for the `DataTransform` method.
+// Defines the transformation of the spatial dimensions ('X', 'Y', 'Z') of data.
+message DataTransformRequest
+{
+    // Transform matrix.
+    nvidia.claraviz.core.Matrix4x4 matrix = 1;
+}
+
+// Message returned to the client by the `DataTransform` method.
+message DataTransformResponse {}
+
+// Message sent by the client for the `CameraAperture` method.
+message CameraApertureRequest
+{
+    // Enable/Disable
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch enable = 1;
+
+    // Aperture
+    // Default: 0.1
+    // Range: ]0.0, FLOAT_MAX]
+    float aperture = 2;
+
+    // Enable/Disable auto focus
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch auto_focus = 3;
+
+    // Focus distance
+    // Default: 1.0
+    // Range: ]0.0, FLOAT_MAX]
+    float focus_distance = 4;
+}
+
+// Message returned to the client by the `CameraAperture` method.
+message CameraApertureResponse {}
+
+// Message sent by the client for the `DataView` method.
+// Defines the section of the n-dimensional data to display when in 'TWOD' view mode.
+message DataViewRequest
+{
+    // Name
+    // Default: ""
+    string name = 1;
+
+    // Zoom factor.
+    // Default: 1.0
+    // Range: [1.0, FLOAT_MAX]
+    float zoom_factor = 2;
+
+    // View offset in mm. If the view offset is zero, the viewed data is centered
+    // to the view.
+    // Default (0.0, 0.0)
+    nvidia.claraviz.core.Float2 view_offset = 3;
+
+    // Pixel aspect ratio, describes how the width of a pixel compares to the height.
+    // Default: 1
+    // Range ]0.0, FLOAT_MAX]
+    float pixel_aspect_ratio = 5;
+}
+
+// Message returned to the client by the `DataView` method.
+message DataViewResponse {}
+
+// Message sent by the client for the `Light` method.
+// Configures a light. Lights are rectangular area lights located with its center at the given position.
+// The rectangle is facing the given direction, light rays emitted perpendicular from the plane.
+message LightRequest
+{
+    // Light index, required
+    // Range: [0, QueryLimitsResponse.max_lights[
+    uint32 index = 1;
+
+    // Light position
+    // Default: (0.0, 0.0, -1.0)
+    nvidia.claraviz.core.Float3 position = 2;
+
+    // Light direction, has to be a unit vector
+    // Default: (0.0, 0.0, 1.0)
+    nvidia.claraviz.core.Float3 direction = 3;
+
+    // Size
+    // Default: 1.0
+    // Range: ]0.0, FLOAT_MAX]
+    float size = 4;
+
+    // Intensity
+    // Default: 1.0
+    // Range: ]0.0, FLOAT_MAX]
+    float intensity = 5;
+
+    // Color
+    // Default: (1.0, 1.0, 1.0)
+    // Range: [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+    nvidia.claraviz.core.Float3 color = 6;
+
+    // Enable/disable
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch enable = 7;
+
+    // Show the light
+    // Default: SWITCH_ENABLE
+    nvidia.claraviz.core.Switch show = 8;
+}
+
+// Message returned to the client by the `Light` method.
+message LightResponse {}
+
+// Message sent by the client for the `BackgroundLight` method.
+// Configures the background light. The background light is a sphere around the origin emitting light from its surface.
+message BackgroundLightRequest
+{
+    // Intensity
+    // Default: 1.0
+    // Range: ]0.0, FLOAT_MAX]
+    float intensity = 1;
+
+    // Top color (+y direction)
+    // Default: (1.0, 1.0, 1.0)
+    // Range: [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+    nvidia.claraviz.core.Float3 top_color = 2;
+
+    // Horizon color (x-z plane)
+    // Default: (1.0, 1.0, 1.0)
+    // Range: [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+    nvidia.claraviz.core.Float3 horizon_color = 3;
+
+    // Bottom color (-y direction)
+    // Default: (1.0, 1.0, 1.0)
+    // Range: [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+    nvidia.claraviz.core.Float3 bottom_color = 4;
+
+    // Enable/disable
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch enable = 5;
+
+    // The background light should cast light
+    // Default: SWITCH_ENABLE
+    nvidia.claraviz.core.Switch cast_light = 6;
+
+    // Show the background
+    // Default: SWITCH_ENABLE
+    nvidia.claraviz.core.Switch show = 7;
+}
+
+// Message returned to the client by the `BackgroundLight` method.
+message BackgroundLightResponse {}
+
+// Message sent by the client for the `TransferFunction` method.
+message TransferFunctionRequest
+{
+    // Shading profile enum
+    enum ShadingProfile
+    {
+        SHADING_PROFILE_UNKNOWN = 0;
+        // BRDF only
+        BRDF_ONLY = 1;
+        // PHASE only
+        PHASE_ONLY = 2;
+        // Hybrid of the above
+        HYBRID = 3;
+    }
+
+    // Shading profile
+    // Default: HYBRID
+    ShadingProfile shading_profile = 1;
+
+    // Blending profile enum, defines how components are blended together
+    enum BlendingProfile
+    {
+        BLENDING_PROFILE_UNKNOWN = 0;
+        // The component with the maximum opacity is used
+        MAXIMUM_OPACITY = 1;
+        // Components are linearily combined by their opacity
+        BLENDED_OPACITY = 2;
+    }
+
+    // Blending profile
+    // Default: MAXIMUM_OPACITY
+    BlendingProfile blending_profile = 2;
+
+    // Global opacity scale factor
+    // Default: 1.0
+    // Range: ]0.0, FLOAT_MAX]
+    float global_opacity = 3;
+
+    // Global density scale factor
+    // Default: 1.0
+    // Range: ]0.0, FLOAT_MAX]
+    float density_scale = 4;
+
+    // Global gradient scale factor
+    // Default: 1.0
+    // Range: ]0.0, FLOAT_MAX]
+    float gradient_scale = 5;
+
+    // Segmentation regions which should be hidden
+    // Default: empty
+    repeated uint32 hidden_regions = 7;
+
+    // Transfer function component
+    message Component
+    {
+        // Density range this component is defined for
+        // Default: (0.0, 1.0)
+        // Range: ([0.0, range.max[, ]range.min, 1.0]
+        nvidia.claraviz.core.Range range = 1;
+
+        // Segmentation regions the component is active in
+        // Default: empty
+        repeated uint32 active_regions = 2;
+
+        // Opacity profile enum
+        enum OpacityProfile
+        {
+            OPACITY_PROFILE_UNKNOWN = 0;
+            // identity, opacity unchanged
+            SQUARE = 1;
+            // opacity output linearly increases until half range then linearly decreases
+            TRIANGLE = 2;
+            // opacity output increase follows sine until `opacity_transition * range`, stays at
+            // opacity input until `1 - opacity_transition * range' then decrease follows sine
+            SINE = 3;
+            // opacity output increase linearly until `opacity_transition * range`, stays at
+            // opacity input until `1 - opacity_transition * range' then decrease linearly
+            TRAPEZIOD = 4;
+        }
+
+        // Opacity profile
+        // Default: SQUARE
+        OpacityProfile opacity_profile = 3;
+
+        // Opacity transition value
+        // Default: 0.2
+        // Range: [0.0, 1.0]
+        float opacity_transition = 4;
+
+        // Opacity input, output determined by opacity profile above
+        // Default: 0.5
+        // Range: [0.0, 1.0]
+        float opacity = 5;
+
+        // Roughness
+        // Default: 0.0
+        // Range: [0.0, FLOAT_MAX]
+        float roughness = 6;
+
+        // Emissive strength
+        // Default: 0.0
+        // Range: [0.0, FLOAT_MAX]
+        float emissive_strength = 7;
+
+        // Each color has a start and end component for the range start and end
+
+        // Diffuse start color
+        // Default: (1.0, 1.0, 1.0)
+        // Range: [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+        nvidia.claraviz.core.Float3 diffuse_start = 8;
+
+        // Diffuse end color
+        // Default: (1.0, 1.0, 1.0)
+        // Range: [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+        nvidia.claraviz.core.Float3 diffuse_end = 9;
+
+        // Specular start color
+        // Default: (1.0, 1.0, 1.0)
+        // Range: [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+        nvidia.claraviz.core.Float3 specular_start = 10;
+
+        // Specular end color
+        // Default: (1.0, 1.0, 1.0)
+        // Range: [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+        nvidia.claraviz.core.Float3 specular_end = 11;
+
+        // Emissive start color
+        // Default: (1.0, 1.0, 1.0)
+        // Range: [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+        nvidia.claraviz.core.Float3 emissive_start = 12;
+
+        // Emissive end color
+        // Default: (1.0, 1.0, 1.0)
+        // Range: [(0.0, 0.0, 0.0), (1.0, 1.0, 1.0)]
+        nvidia.claraviz.core.Float3 emissive_end = 13;
+    }
+
+    // Transfer function components
+    repeated Component components = 6;
+}
+
+// Message returned to the client by the `TransferFunction` method.
+message TransferFunctionResponse {}
+
+// Message sent by the client for the `PostProcessTonemap` method.
+message PostProcessTonemapRequest
+{
+    // Enable/Disable
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch enable = 1;
+
+    // Exposure
+    // Default: 0.5
+    // Range: [0.0, FLOAT_MAX]
+    float exposure = 2;
+}
+
+// Message returned to the client by the `PostProcessTonemap` method.
+message PostProcessTonemapResponse {}
+
+// Message sent by the client for the `PostProcessDenoise` method.
+message PostProcessDenoiseRequest
+{
+    // Method enum
+    enum Method
+    {
+        METHOD_UNKNOWN = 0;
+
+        // nvidia.claraviz.core.Switch off
+        OFF = 1;
+        // KNN (K Nearest Neighbors) filter including depth
+        KNN = 2;
+        // Optix AI-Accelerated denoiser
+        AI = 3;
+    }
+
+    // Denoise method
+    // Default: OFF
+    Method method = 1;
+
+    // Filter radius in pixels (KNN filter only)
+    // Default: 3
+    // Range: [1, INT32_MAX]
+    uint32 radius = 2;
+
+    // Spatial weight (KNN filter only)
+    // Default: 0.05
+    // Range: [0.0, FLOAT_MAX]
+    float spatial_weight = 3;
+
+    // Depth weight (KNN filter only)
+    // Default: 3.0
+    // Range: [0.0, FLOAT_MAX]
+    float depth_weight = 4;
+
+    // Noise threshold (KNN filter only)
+    // Default: 0.2
+    // Range: [0.0, 1.0]
+    float noise_threshold = 5;
+
+    // Enable/Disable iteration limit
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch enable_iteration_limit = 6;
+
+    // Apply denoise for iterations below that limit only
+    // Default: 100
+    // Range: [1, UINT32_MAX]
+    uint32 iteration_limit = 7;
+}
+
+// Message returned to the client by the `PostProcessDenoise` method.
+message PostProcessDenoiseResponse {}
+
+// Message sent by the client for the `RenderSettings` method.
+message RenderSettingsRequest
+{
+    // Data interpolation mode
+    enum InterpolationMode
+    {
+        MODE_UNKNOWN = 0;
+
+        // Linear interpolation
+        LINEAR = 1;
+        // B-spline interpolation
+        BSPLINE = 2;
+        // Catmull-Rom spline interpolation
+        CATMULLROM = 3;
+    }
+
+    // Interpolation mode
+    // Default: BSPLINE
+    InterpolationMode interpolation_mode = 1;
+
+    // Ray marching step size in voxels
+    // Default: 1.0
+    // Range: ]0, FLOAT_MAX]
+    float step_size = 2;
+
+    // Ray marching step size in voxels when doing shadow rays
+    // Default: 1.0
+    // Range: ]0, FLOAT_MAX]
+    float shadow_step_size = 3;
+
+    // Maximum iterations, the renderer stops after this limit is reached
+    // Default: 10000
+    // Range: [1, UINT32_MAX]
+    uint32 max_iterations = 4;
+
+    // Time slot for a frame in ms. If rendering single images, the renderer returns after this time.
+    // If rendering a video stream the time is clamped to the frame time.
+    // If the value is 0.0 the time slot is ignored.
+    // Default: 0.0
+    // Range: [0.0, FLOAT_MAX]
+    float time_slot = 5;
+
+    // Enable warped rendering.
+    // If enabled the image is rendered in high resolution in the center. The resolution is reduced linearly to
+    // the edges.
+    // See also: warp_resolution_scale, warp_full_resolution_diameter
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch enable_warp = 6;
+
+    // If warped rendering is enabled this sets the ratio between the warp resolution and the output resolution.
+    // See also: enable_warp
+    // Default: 1.0
+    // Range: ]0.0, 1.0]
+    float warp_resolution_scale = 7;
+
+    // If warped rendering is enable this set size of the center full resolution area.
+    // See also: enable_warp
+    // Default: 1.0
+    // Range: ]0.0, 1.0]
+    float warp_full_resolution_size = 8;
+
+    // Enable to render more samples the central foveated area than in the border areas. Else all pixels are sampled equally.
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch enable_foveation = 9;
+
+    // If enabled the color and depth information of previous frames is stored. That information is reprojected to the
+    // current frame thus improving quality and reducing noise.
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch enable_reproject = 10;
+
+    // Enable to store image depth information to a separate high precision depth buffer. Else depth is stored in the
+    // color image alpha channel.
+    // Default: SWITCH_DISABLE
+    nvidia.claraviz.core.Switch enable_separate_depth = 11;
+}
+
+// Message returned to the client by the `RenderSettings` method.
+message RenderSettingsResponse {}
+
+// Message sent by the client for the `QueryLimits` method.
+message QueryLimitsRequest
+{
+    // The data dimension order to request the limit for. See the 'data_dimension' field of
+    // the 'DataConfigRequest' for more information.
+    string dimension_order = 1;
+}
+
+// Message returned to the client by the `QueryLimits` method.
+message QueryLimitsResponse
+{
+    // Maximum data size for the dimension order requested
+    repeated uint32 max_data_size = 1;
+
+    // Maximum lights
+    uint32 max_lights = 2;
+}
+
+// Message sent by the client for the `View` method.
+// Used to setup the view
+message ViewRequest
+{
+    // View name.
+    // When using multiple views then give each of them a unique name.
+    // If no name is given this references the default view.
+    // Default: ""
+    string name = 4;
+
+    // Name of the stream to render to, optional. If not specified render to the default stream.
+    // Default: ""
+    string stream_name = 5;
+
+    // View mode
+    enum ViewMode
+    {
+        MODE_UNKNOWN = 0;
+
+        // 3D Cinematic render view
+        // The view is using a perspective projection. Data is displayed using realistic lighting and shadows. Transfer
+        // functions are used to map from input data to material properties.
+        CINEMATIC = 1;
+        // 3D Slice view
+        // The view is using an orthographic projection. The vector between the camera 'look_at' and 'eye' points define
+        // the view direction. The 'eye' point of the camera defines the slice to display within the volumetric data.
+        // The size of the data is defined by the data array level configuration 'size' and 'element_size' parameters, the
+        // data is also limited to the data crop settings.
+        // The 'fov' camera parameter defines the width of the viewing frustum.
+        SLICE = 2;
+        // 3D Slice view with segmentation masks.
+        // Same as the 'SLICE' mode above but when a segmentation mask is specified the segments are colored with the transfer
+        // function emissive and diffuse color blended with the density of the data.
+        SLICE_SEGMENTATION = 3;
+        // 2D n-dimensional data view
+        // The view is displaying generic n-dimensional data. The section of the data to display is defined by 'data_view_name'.
+        TWOD = 4;
+    }
+
+    // View mode
+    // Default: CINEMATIC
+    ViewMode mode = 1;
+
+    // The name of the camera to use for 3D views
+    // Default: ""
+    string camera_name = 2;
+
+    // The name of the data view to use for the 2D data view mode
+    // Default: ""
+    string data_view_name = 3;
+
+    // Stereo mode
+    enum StereoMode
+    {
+        // unknown type (invalid)
+        STEREO_MODE_UNKNOWN = 0;
+        // no stereo rendering
+        STEREO_MODE_OFF  = 1;
+        // render left eye
+        STEREO_MODE_LEFT = 2;
+        // render right eye
+        STEREO_MODE_RIGHT = 3;
+        // render left eye in top half and right eye in bottom half
+        STEREO_MODE_TOP_BOTTOM = 4;
+    }
+
+    // Stereo mode (supported by 3D Cinematic renderer only)
+    // Default: OFF
+    StereoMode stereo_mode = 6;
+}
+
+// Message returned to the client by the `View` method.
+message ViewResponse {}
+
+// Message sent by the client for the `Reset` method.
+message ResetRequest
+{
+    // Interface selector
+    enum Interface
+    {
+        INTERFACE_UNKNOWN = 0;
+
+        // reset all interfaces
+        ALL = 1;
+
+        CAMERA               = 2;
+        CAMERA_APERTURE      = 3;
+        DATA                 = 12;
+        DATA_CONFIG          = 10;
+        DATA_CROP            = 11;
+        DATA_TRANSFORM       = 15;
+        DATA_VIEW            = 14;
+        LIGHT                = 4;
+        BACKGROUND_LIGHT     = 5;
+        POST_PROCESS_DENOISE = 6;
+        POST_PROCESS_TONEMAP = 7;
+        RENDER_SETTINGS      = 8;
+        TRANSFER_FUNCTION    = 9;
+        VIEW                 = 13;
+    }
+
+    // List of interfaces to reset to defaults
+    repeated Interface interfaces = 1;
+}
+
+// Message returned to the client by the `Reset` method.
+message ResetResponse {}

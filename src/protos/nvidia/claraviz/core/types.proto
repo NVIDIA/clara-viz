@@ -1,0 +1,91 @@
+/*
+ * Copyright (c) 2018-2023, NVIDIA CORPORATION. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+package nvidia.claraviz.core;
+
+// Switch enum to enable/disable a feature
+enum Switch
+{
+    SWITCH_UNKNOWN = 0; // unknown type (invalid)
+    SWITCH_ENABLE  = 1; // enable
+    SWITCH_DISABLE = 2; // disable
+}
+
+// Unique identifier
+message Identifier
+{
+    // Expected to be unique string e.g. an UUID.
+    string value = 1;
+}
+
+// Range
+message Range
+{
+    // minimum value
+    float min = 1;
+    // maximum value
+    float max = 2;
+}
+
+// A vector type containing 2 floats
+message Float2
+{
+    // X value
+    float x = 1;
+    // Y value
+    float y = 2;
+}
+
+// A vector type containing 3 floats
+message Float3
+{
+    // X value
+    float x = 1;
+    // Y value
+    float y = 2;
+    // Z value
+    float z = 3;
+}
+
+// A 4x4 matrix type
+message Matrix4x4
+{
+    // first row
+    float m00 = 1;
+    float m01 = 2;
+    float m02 = 3;
+    float m03 = 4;
+
+    // second row
+    float m10 = 5;
+    float m11 = 6;
+    float m12 = 7;
+    float m13 = 8;
+
+    // third row
+    float m20 = 9;
+    float m21 = 10;
+    float m22 = 11;
+    float m23 = 12;
+
+    // fourth row
+    float m30 = 13;
+    float m31 = 14;
+    float m32 = 15;
+    float m33 = 16;
+}

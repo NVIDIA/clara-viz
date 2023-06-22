@@ -1,3 +1,5 @@
+bin/*
+build*/*
 .ipynb_checkpoints/
 *.py[cod]
 
@@ -7,8 +9,8 @@
 **/video.mp4
 
 # notebooks
-notebooks/HelloWorld.jpg
-notebooks/data/bonsai/*.nhdr
-notebooks/data/bonsai/*.raw
-notebooks/data/pancreas/*.raw
-notebooks/data/OpenSlide/*.tiff
+python/notebooks/HelloWorld.jpg
+python/notebooks/data/bonsai/*.nhdr
+python/notebooks/data/bonsai/*.raw
+python/notebooks/data/pancreas/*.raw
+python/notebooks/data/OpenSlide/*.tiff

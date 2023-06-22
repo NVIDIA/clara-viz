@@ -1,0 +1,153 @@
+/*
+ * Copyright (c) 2019-2021, NVIDIA CORPORATION. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+package nvidia.claraviz.video.v1;
+
+option java_package = "com.nvidia.claraviz.video.v1";
+
+// Service that implements the video streaming for the Render Server.
+// Streams have a name used by the other methods of the video interface
+// The default stream is selected using an empty name.
+// The client uses the `Config` method to set the desired video stream
+// parameters such as width and height. These configuration parameters
+// can be also changed while the stream is active.
+// The `Stream` method transports the video data to the client. The
+// stream is active as long as the video is in `PLAY` state.
+// The client can play, pause and stop the stream with the `Control`
+// method. The stream is in 'STOP' mode on startup.
+service Video
+{
+    // Configure the video stream
+    rpc Config(ConfigRequest) returns(ConfigResponse) {}
+
+    // Get video stream data
+    rpc Stream(StreamRequest) returns(stream StreamResponse) {}
+
+    // Control the video state (play, pause, ...)
+    rpc Control(ControlRequest) returns(ControlResponse) {}
+
+    // Query limits
+    rpc QueryLimits(QueryLimitsRequest) returns(QueryLimitsResponse) {}
+}
+
+// Message sent by the client for the `Config` method.
+message ConfigRequest
+{
+    // Stream name.
+    // If no name is given use the default stream.
+    // Default: ""
+    string name = 5;
+
+    // Width of the video, value needs to evenly divisible by 2
+    // Default: QueryLimitsResponse.min_video_width
+    // Range: ]QueryLimitsResponse.min_video_width, QueryLimitsResponse.max_video_width]
+    uint32 width = 1;
+
+    // Height of the video, value needs to evenly divisible by 2
+    // Default: QueryLimitsResponse.min_video_height
+    // Range: ]QueryLimitsResponse.min_video_height, QueryLimitsResponse.max_video_height]
+    uint32 height = 2;
+
+    // Target framerate of the video
+    // If set to 0.0 the frames will delivered when rendering is done. Converging renderers
+    // will deliver the final frame only.
+    // Default: 30.0
+    // Range: [0.0, inf]
+    float frame_rate = 3;
+
+    // Target bitrate of the video
+    // Default: 1 * 1024 * 1024
+    // Range: ]0.0, UINT32_MAX]
+    uint32 bit_rate = 4;
+}
+
+// Message returned to the client by the `Config` method.
+message ConfigResponse
+{
+}
+
+// Message sent by the client for the `Stream` method.
+message StreamRequest
+{
+    // Stream name.
+    // If no name is given use the default stream.
+    // Default: ""
+    string name = 1;
+}
+
+// Message returned to the client by the `Stream` method.
+message StreamResponse
+{
+    // Video stream data
+    bytes data = 1;
+
+    // If this is true then this is the first data segment of a new stream. This can be triggered
+    // when e.g. the resolution changed.
+    // When writing to a file this can be used to close the current file and start writing to
+    // a new file. When streaming to a browser then a new MediaSource SourceBuffer object needs
+    // to be created.
+    bool new_stream = 2;
+}
+
+// Message sent by the client for the `Control` method.
+message ControlRequest
+{
+    // Stream name.
+    // If no name is given use the default stream.
+    // Default: ""
+    string name = 2;
+
+    // Video state enum
+    enum State
+    {
+        UNKNOWN = 0;    // unknown state (ignored)
+        PLAY = 1;       // video is playing
+        PAUSE = 2;      // video is paused
+        STOP = 3;       // stop video, video stream is closed if it had been open
+    }
+
+    // Video state
+    // Default: State::STOP
+    State state = 1;
+}
+
+// Message returned to the client by the `Control` method.
+message ControlResponse
+{
+}
+
+// Message sent by the client for the `QueryLimits` method.
+message QueryLimitsRequest
+{
+}
+
+// Message returned to the client by the `QueryLimits` method.
+message QueryLimitsResponse
+{
+    // Minimum video width
+    uint32 min_video_width = 1;
+
+    // Minimum video height
+    uint32 min_video_height = 2;
+
+    // Maximum video width
+    uint32 max_video_width = 3;
+
+    // Maximum video height
+    uint32 max_video_height = 4;
+}

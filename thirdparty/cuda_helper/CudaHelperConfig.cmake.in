@@ -1,0 +1,51 @@
+# Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+@PACKAGE_INIT@
+
+# Protect against multiple inclusion, which would fail when already imported targets are added once more.
+set(_targetsDefined)
+set(_targetsNotDefined)
+set(_expectedTargets)
+foreach(_expectedTarget CudaHelper)
+  list(APPEND _expectedTargets ${_expectedTarget})
+  if(NOT TARGET ${_expectedTarget})
+    list(APPEND _targetsNotDefined ${_expectedTarget})
+  endif()
+  if(TARGET ${_expectedTarget})
+    list(APPEND _targetsDefined ${_expectedTarget})
+  endif()
+endforeach()
+if("${_targetsDefined}" STREQUAL "${_expectedTargets}")
+  unset(_targetsDefined)
+  unset(_targetsNotDefined)
+  unset(_expectedTargets)
+  return()
+endif()
+if(NOT "${_targetsDefined}" STREQUAL "")
+  message(FATAL_ERROR "Some (but not all) targets in this export set were already defined.\nTargets Defined: ${_targetsDefined}\nTargets not yet defined: ${_targetsNotDefined}\n")
+endif()
+unset(_targetsDefined)
+unset(_targetsNotDefined)
+unset(_expectedTargets)
+
+# Create imported target CudaHelper
+add_library(CudaHelper::cuda_helper INTERFACE IMPORTED)
+
+set_target_properties(CudaHelper::cuda_helper PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "@PACKAGE_CudaHelper_DIR@/include"
+)
+
+# This file does not depend on other imported targets which have
+# been exported from the same project but in a separate export set.
