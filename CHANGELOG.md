@@ -1,3 +1,10 @@
+# clara-viz 0.3.1 (July 12 2023)
+
+## Bug Fixes
+
+* Gracefully disable OptiX denoiser if it can't be created
+* make nvjpeg support optional
+
 # clara-viz 0.3.0 (June 22 2023)
 
 ## Features
