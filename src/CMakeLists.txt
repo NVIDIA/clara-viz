@@ -16,7 +16,7 @@ cmake_minimum_required(VERSION 3.12)
 
 project(ClaraVizServer
     DESCRIPTION "ClaraVizServer"
-    VERSION 0.3.0
+    VERSION 0.3.1
     LANGUAGES CXX
 )
 

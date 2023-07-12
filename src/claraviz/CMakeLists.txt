@@ -102,6 +102,23 @@ find_package(CUDAToolkit REQUIRED)
 find_package(nvsharedmemory CONFIG)
 find_package(ZLIB)
 
+# nvidia-docker is not mapping nvjpeg into the image, prefer to link statically
+find_cuda_helper_libs(nvjpeg_static)
+if(CUDA_nvjpeg_static_LIBRARY)
+    message(STATUS "Found static nvjpeg lib")
+    set(nvjpeg_LIB CUDA::nvjpeg_static)
+    set(nvjpeg_FOUND TRUE)
+else()
+    find_cuda_helper_libs(nvjpeg)
+    if(CUDA_nvjpeg_LIBRARY)
+        message(STATUS "Found shared nvjpeg lib")
+        set(nvjpeg_LIB CUDA::nvjpeg)
+        set(nvjpeg_FOUND TRUE)
+    else()
+        message(NOTICE "Could not find nvjpeg lib (neither shared nor static), JPEG encdoing support disabled")
+    endif()
+endif()
+
 enable_language(CUDA)
 
 target_code_coverage(${PROJECT_NAME})
@@ -118,8 +135,6 @@ target_sources(${PROJECT_NAME}
         interface/ImageInterface.cpp
 
         hardware/cuda/Convert.cu
-
-        hardware/nvjpeg/NvJpegService.cpp
 
         image/JpegEncoder.cpp
 
@@ -151,30 +166,27 @@ if(ZLIB_FOUND)
         )
 endif()
 
+if(nvjpeg_FOUND)
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+            hardware/nvjpeg/NvJpegService.cpp
+        )
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE
+            CLARA_VIZ_WITH_NVJPEG
+        )
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC
+            ${nvjpeg_LIB}
+        )
+endif()
+
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         clara::viz::core
         CUDA::cuda_driver
         CUDA::cudart_static
     )
-
-# nvidia-docker is not mapping nvjpeg into the image, prefer to link statically
-find_cuda_helper_libs(nvjpeg_static)
-if(NOT CUDA_nvjpeg_static_LIBRARY)
-    find_cuda_helper_libs(nvjpeg)
-    if(NOT CUDA_nvjpeg_LIBRARY)
-        message(FATAL_ERROR "Could not find nvjpeg lib (neither shared nor static)")
-    endif()
-    target_link_libraries(${PROJECT_NAME}
-        PUBLIC
-            CUDA::nvjpeg
-        )
-else()
-    target_link_libraries(${PROJECT_NAME}
-        PUBLIC
-            CUDA::nvjpeg_static
-        )
-endif()
 
 if (CLARA_VIZ_WITH_GRPC)
     ######################

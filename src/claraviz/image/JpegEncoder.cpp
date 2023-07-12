@@ -21,7 +21,9 @@
 
 #include "claraviz/hardware/cuda/Convert.h"
 #include "claraviz/hardware/cuda/CudaService.h"
+#ifdef CLARA_VIZ_WITH_NVJPEG
 #include "claraviz/hardware/nvjpeg/NvJpegService.h"
+#endif
 #include "claraviz/util/Blob.h"
 
 namespace clara::viz
@@ -63,9 +65,11 @@ private:
     std::unique_ptr<CudaFunctionLauncher> convert_ABGR_to_YCbCr444CCIR601_;
     std::unique_ptr<CudaMemory2D> buffer_ycbcr_;
 
+#ifdef CLARA_VIZ_WITH_NVJPEG
     UniqueNvJpegInstance instance_;    ///< encoder instance
     UniqueNvJpegEncoderState state_;   ///< encoder state
     UniqueNvJpegEncoderParams params_; ///< encoder params
+#endif
 };
 
 JpegEncoder::JpegEncoder()
@@ -99,6 +103,7 @@ void JpegEncoder::Impl::Encode(uint32_t width, uint32_t height, Format format, c
         throw InvalidArgument("memory") << "is a nullptr";
     }
 
+#ifdef CLARA_VIZ_WITH_NVJPEG
     if (!convert_ABGR_to_YCbCr444CCIR601_)
     {
         convert_ABGR_to_YCbCr444CCIR601_ = GetConvertABGRToYCbCr444CCIR601Launcher();
@@ -165,6 +170,9 @@ void JpegEncoder::Impl::Encode(uint32_t width, uint32_t height, Format format, c
     // retrieve the data
     NvJpegCheck(
         nvjpegEncodeRetrieveBitstream(instance_.get(), state_.get(), bitstream.data(), &length, CU_STREAM_PER_THREAD));
+#else // CLARA_VIZ_WITH_NVJPEG
+    Log(LogLevel::Error) << "JPEG encoding not supported, nvjpeg library not found";
+#endif // CLARA_VIZ_WITH_NVJPEG
 }
 
 } // namespace clara::viz
