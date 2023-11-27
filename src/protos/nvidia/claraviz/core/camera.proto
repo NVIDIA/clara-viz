@@ -20,25 +20,52 @@ package nvidia.claraviz.core;
 
 import "nvidia/claraviz/core/types.proto";
 
-// Message sent by the client for the `Camera` method.
-// Defines the 3D viewing transformation.
+/**
+ * Message sent by the client for the `Camera` method.
+ *
+ * Defines the 3D viewing transformation.
+ *
+ * If 'enable_pose' is 'SWITCH_DISABLE', the head pose is set by the 'eye', 'look_at' and 'up' parameters. Else
+ * if 'enable_pose' is 'SWITCH_ENABLE' the head pose is set by the 'pose' parameter.
+ *
+ * The ViewRequest::stereo_mode setting determines the camera setup.
+ *
+ * - If stereo mode is 'STEREO_MODE_OFF' then the image is rendered from the head pose  and field of view is set using 'field_of_view'.
+ * - If stereo mode is 'STEREO_MODE_LEFT' or 'STEREO_MODE_RIGHT' then the the left or right eye image is rendered as set by 'left_eye_pose'
+ * or 'right_eye_pose'.
+ * - If stereo mode is 'STEREO_MODE_TOP_BOTTOM' then he left eye is rendered to the top half of the image and the right eye to the
+ * bottom half of the image.
+ * - If stereo mode is 'STEREO_MODE_LEFT', 'STEREO_MODE_RIGHT' or STEREO_MODE_TOP_BOTTOM', the field of view is set using 'left_tangent_x', 'left_tangent_y',
+ * 'right_tangent_x' and 'right_tangent_y'. The 'field_of_view` parameter is ignored.
+ *
+ * Also when stereo rendering is enabled, `left_gaze_direction` and `right_gaze_direction` are used the determine
+ * the position of the high resolution area when using warped rendering. @sa RenderSettingsInterfaceData::enable_warp.
+ */
 message CameraRequest
 {
     // Name
     // Default: ""
     string name = 6;
 
-    // Position of the eye point, has to be different from 'look_at'
+    // Enable use of 'pose' parameter instead of 'eye', 'look_at' and 'up'.
+    // Default: SWITCH_DISABLE
+    Switch enable_pose = 18;
+
+    // Position of the eye point, has to be different from 'look_at'. Used when 'enable_pose' is 'SWITCH_DISABLE'.
     // Default: (0.0, 0.0, -1.0)
     Float3 eye = 1;
 
-    // Position of the reference point, has to be different from 'eye'
+    // Position of the reference point, has to be different from 'eye'. Used when 'enable_pose' is 'SWITCH_DISABLE'.
     // Default: (0.0, 0.0, 0.0)
     Float3 look_at = 2;
 
-    // Direction of the up vector, has to be a unit vector
+    // Direction of the up vector, has to be a unit vector. Used when 'enable_pose' is 'SWITCH_DISABLE'.
     // Default: (0.0, 1.0, 0.0)
     Float3 up = 3;
+
+    // Camera pose. Used when 'enable_pose' is 'SWITCH_ENABLE'.
+    // Default: identity matrix
+    Matrix4x4 pose = 19;
 
     // Field of view angle in degrees, in x direction
     // Default: 30.0

@@ -260,7 +260,10 @@ struct NvEncService::Impl
 {
     ~Impl() = default;
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wignored-attributes"
     UniqueObj<void, decltype(&dlclose), &dlclose> nvenc_lib; ///< NvEnc lib handle
+#pragma GCC diagnostic pop
 
     NV_ENCODE_API_FUNCTION_LIST nvenc; ///< NvEnc API
 };

@@ -30,15 +30,20 @@ namespace clara::viz
  * Camera interface data definition.
  *
  * Defines the 3D viewing transformation.
- * The the head pose is set by the 'eye', 'look_at' and 'up' parameters.
+ *
+ * If 'enable_pose' is 'false', the head pose is set by the 'eye', 'look_at' and 'up' parameters. Else
+ * if 'enable_pose' is 'true' the head pose is set by the 'pose' parameter.
+ *
  * The ViewInterfaceData::stereo_mode setting determines the camera setup.
- * If stereo mode is 'OFF' then the image is rendered from the head pose and field of view is set using 'field_of_view'.
- * If stereo mode is 'LEFT' or 'RIGHT' then the the left or right eye image is rendered as set by 'left_eye_pose'
+ *
+ * - If stereo mode is 'OFF' then the image is rendered from the head pose  and field of view is set using 'field_of_view'.
+ * - If stereo mode is 'LEFT' or 'RIGHT' then the the left or right eye image is rendered as set by 'left_eye_pose'
  * or 'right_eye_pose'.
- * If stereo mode is 'TOP_BOTTOM' then he left eye is rendered to the top half of the image and the right eye to the
+ * - If stereo mode is 'TOP_BOTTOM' then he left eye is rendered to the top half of the image and the right eye to the
  * bottom half of the image.
- * If stereo mode is 'LEFT', 'RIGHT' or TOP_BOTTOM', the field of view is set using 'left_tangent_x', 'left_tangent_y',
+ * - If stereo mode is 'LEFT', 'RIGHT' or TOP_BOTTOM', the field of view is set using 'left_tangent_x', 'left_tangent_y',
  * 'right_tangent_x' and 'right_tangent_y'. The 'field_of_view` parameter is ignored.
+ *
  * Also when stereo rendering is enabled, `left_gaze_direction` and `right_gaze_direction` are used the determine
  * the position of the high resolution area when using warped rendering. @sa RenderSettingsInterfaceData::enable_warp.
  */
@@ -62,28 +67,42 @@ struct CameraInterfaceData
         std::string name;
 
         /**
-         * Position of the eye point, has to be different from 'look_at'
+         * Enable use of 'pose' parameter instead of 'eye', 'look_at' and 'up'.
+         *
+         * Default: false
+         */
+        bool enable_pose;
+
+        /**
+         * Position of the eye point, has to be different from 'look_at'. Used when 'enable_pose' is 'false'.
          *
          * Default: (0.0, 0.0, -1.0)
          */
         V<Vector3f> eye;
 
         /**
-         * Position of the reference point, has to be different from 'eye'
+         * Position of the reference point, has to be different from 'eye'. Used when 'enable_pose' is 'false'.
          *
          * Default: (0.0, 0.0, 0.0)
          */
         V<Vector3f> look_at;
 
         /**
-         * Direction of the up vector, has to be a unit vector
+         * Direction of the up vector, has to be a unit vector. Used when 'enable_pose' is 'false'.
          *
          * Default: (0.0, 1.0, 0.0)
          */
         V<Vector3f> up;
 
         /**
-         * Field of view angle in degrees, in x direction
+         * Camera pose. Used when 'enable_pose' is 'true'.
+         *
+         * Default: identity matrix
+         */
+        Matrix4x4 pose;
+
+        /**
+         * Field of view angle in degrees, in x direction.
          *
          * Default: 30.0
          *

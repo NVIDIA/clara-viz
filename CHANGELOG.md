@@ -1,3 +1,14 @@
+# clara-viz 0.3.2 (November 27 2023)
+
+## Features
+
+* Support camera pose for non-stereo cases as well
+
+## Bug Fixes
+
+* Fix cmake warnings and consolidate cmake_minimum_required() usage
+* Fix compile warning in NvEnvService.cpp
+
 # clara-viz 0.3.1 (July 12 2023)
 
 ## Bug Fixes

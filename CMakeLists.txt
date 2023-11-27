@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.24...3.26)
 
 # Options
 option(CLARA_VIZ_CUDA_PROFILING "Enable CUDA profiling" OFF)
@@ -25,7 +25,7 @@ include(ExternalProject)
 
 project(ClaraViz
     DESCRIPTION "ClaraViz"
-    VERSION 0.3.1
+    VERSION 0.3.2
     LANGUAGES CXX
 )
 

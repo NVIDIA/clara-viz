@@ -190,9 +190,11 @@ void to_json(nlohmann::json &j, const CameraInterface::DataIn::Camera &camera)
 {
     j = nlohmann::json{
         {"name", camera.name},
+        {"enablePose", camera.enable_pose},
         {"eye", camera.eye.Get()},
         {"lookAt", camera.look_at.Get()},
         {"up", camera.up.Get()},
+        {"pose", camera.pose},
         {"fieldOfView", camera.field_of_view.Get()},
         {"pixelAspectRatio", camera.pixel_aspect_ratio.Get()},
         {"enableStereo", camera.enable_stereo},
@@ -213,10 +215,12 @@ void to_json(nlohmann::json &j, const CameraInterface::DataIn::Camera &camera)
 
 void from_json(const nlohmann::json &j, CameraInterface::DataIn::Camera &camera)
 {
-    camera.name = j.value("name", camera.name);
+    camera.name        = j.value("name", camera.name);
+    camera.enable_pose = j.value("enablePose", camera.enable_pose);
     camera.eye.Set(j.value("eye", camera.eye.Get()));
     camera.look_at.Set(j.value("lookAt", camera.look_at.Get()));
     camera.up.Set(j.value("up", camera.up.Get()));
+    camera.pose = j.value("leftEyePose", camera.pose);
     camera.field_of_view.Set(j.value("fieldOfView", camera.field_of_view.Get()));
     camera.pixel_aspect_ratio.Set(j.value("pixelAspectRatio", camera.pixel_aspect_ratio.Get()));
     camera.enable_stereo  = j.value("enableStereo", camera.enable_stereo);

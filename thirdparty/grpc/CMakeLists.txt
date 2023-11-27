@@ -12,16 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cmake_minimum_required(VERSION 3.13)
-
 include(GNUInstallDirs)
 include(FetchContent)
 include("${CLARA_VIZ_PUBLIC_CMAKE_TOOLS_DIR}/Tools.cmake")
 
 prebuild_setup(VERSION_VAR gRPC_VERSION)
-
-# silence a warning about 'ZLIB_ROOT' usage
-cmake_policy(SET CMP0074 OLD)
 
 ExternalProject_Add(gRPC_src
     PREFIX grpc

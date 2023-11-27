@@ -33,7 +33,7 @@ COPY ./src/examples/renderer/gen_volume.py .
 RUN python3 gen_volume.py volume
 
 ARG DOCKER_HUB
-FROM ${DOCKER_HUB}nvidia/cuda:11.2.0-base-ubuntu18.04
+FROM ${DOCKER_HUB}nvidia/cuda:11.2.2-base-ubuntu18.04
 
 ARG VOLUME_FILE="/app/volume.mhd"
 ENV VOLUME_FILE_ENV=$VOLUME_FILE
