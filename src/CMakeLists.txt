@@ -12,11 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.24...3.26)
+
+# set CMP0148 policy to OLD to allow FindCUDA
+if(POLICY CMP0146)
+    cmake_policy(SET CMP0146 OLD)
+endif()
 
 project(ClaraVizServer
     DESCRIPTION "ClaraVizServer"
-    VERSION 0.3.1
+    VERSION 0.3.2
     LANGUAGES CXX
 )
 

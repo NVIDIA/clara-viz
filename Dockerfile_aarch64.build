@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG DOCKER_HUB
-FROM ${DOCKER_HUB}nvidia/cuda:11.2.0-devel-ubuntu18.04
+FROM ${DOCKER_HUB}nvidia/cuda:11.2.2-devel-ubuntu18.04
 
 # install dependencies
 #  * wget, ca-certificates: to download packages
@@ -44,7 +44,7 @@ RUN mkdir /tmp/git-lfs \
     && rm -rf /tmp/git-lfs
 
 # Install cmake
-ARG CMAKE_VERSION="3.21.0"
+ARG CMAKE_VERSION="3.24.0"
 RUN mkdir /tmp/cmake \
     && cd /tmp/cmake \
     && ARCH=$(uname -m) \

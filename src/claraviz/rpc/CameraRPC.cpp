@@ -30,6 +30,16 @@ void CameraContext::ExecuteRPC(nvidia::claraviz::core::CameraRequest &request,
 
     CameraInterface::DataIn::Camera *camera = access->GetOrAddCamera(request.name());
 
+    switch (request.enable_pose())
+    {
+    case nvidia::claraviz::core::SWITCH_ENABLE:
+        camera->enable_pose = true;
+        break;
+    case nvidia::claraviz::core::SWITCH_DISABLE:
+        camera->enable_pose = false;
+        break;
+    }
+
     if (request.has_eye())
     {
         camera->eye.Set(MakeVector3f(request.eye()));
@@ -41,6 +51,11 @@ void CameraContext::ExecuteRPC(nvidia::claraviz::core::CameraRequest &request,
     if (request.has_up())
     {
         camera->up.Set(MakeVector3f(request.up()));
+    }
+
+    if (request.has_pose())
+    {
+        camera->pose = MakeMatrix4x4(request.pose());
     }
 
     if (request.field_of_view() != 0.f)

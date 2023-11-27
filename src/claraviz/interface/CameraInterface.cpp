@@ -16,6 +16,8 @@
 
 #include "claraviz/interface/CameraInterface.h"
 
+#include <algorithm>
+
 #include "claraviz/util/Validator.h"
 
 namespace clara::viz
@@ -26,7 +28,8 @@ DEFINE_CLASS_MESSAGEID(CameraInterface::Message);
 
 template<>
 CameraInterface::DataIn::Camera::Camera()
-    : eye(Vector3f(0.f, 0.f, -1.f),
+    : enable_pose(false)
+    , eye(Vector3f(0.f, 0.f, -1.f),
           [this](const Vector3f &value) { ValidatorDifferent(value, look_at.Get(), "Eye position and look at point"); })
     , look_at(Vector3f(0.f, 0.f, 0.f),
               [this](const Vector3f &value) { ValidatorDifferent(value, eye.Get(), "Look at point and eye position"); })
@@ -149,10 +152,12 @@ CameraInterface::DataOut CameraInterface::Get()
         CameraInterface::DataOut::Camera &camera_out = data_out.cameras.back();
 
         camera_out.name                 = camera_in.name;
+        camera_out.enable_pose          = camera_in.enable_pose;
         camera_out.eye                  = camera_in.eye.Get();
         camera_out.look_at              = camera_in.look_at.Get();
         camera_out.up                   = camera_in.up.Get();
         camera_out.field_of_view        = camera_in.field_of_view.Get();
+        camera_out.pose                 = camera_in.pose;
         camera_out.pixel_aspect_ratio   = camera_in.pixel_aspect_ratio.Get();
         camera_out.enable_stereo        = camera_in.enable_stereo;
         camera_out.left_eye_pose        = camera_in.left_eye_pose;

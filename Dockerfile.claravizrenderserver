@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ARG DOCKER_HUB
-FROM ${DOCKER_HUB}nvidia/cuda:11.2.0-base-ubuntu18.04
+FROM ${DOCKER_HUB}nvidia/cuda:11.2.2-base-ubuntu18.04
 
 WORKDIR /app
 

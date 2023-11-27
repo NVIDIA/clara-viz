@@ -1,7 +1,7 @@
 diff -Naur o/CMakeLists.txt n/CMakeLists.txt
 --- o/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
 +++ n/CMakeLists.txt	2019-01-09 13:42:26.408739488 +0100
-@@ -0,0 +1,52 @@
+@@ -0,0 +1,50 @@
 +# Copyright (c) 2019-2023, NVIDIA CORPORATION. All rights reserved.
 +#
 +# Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,6 @@ diff -Naur o/CMakeLists.txt n/CMakeLists.txt
 +# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 +# See the License for the specific language governing permissions and
 +# limitations under the License.
-+
-+cmake_minimum_required(VERSION 3.12)
 +
 +set(PROJECT_NAME protoc-gen-grpc-web)
 +
