@@ -18,6 +18,7 @@ FROM ${DOCKER_HUB}pypa/manylinux_2_28_x86_64:2023-03-20-098e33d
 # Install the Cuda toolkit
 #  - use gcc-10 since gcc-12 is not supported by CUDA 11.4
 RUN dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/cuda-rhel8.repo \
+    && dnf upgrade -y almalinux-release \
     && dnf install -y \
         cuda-minimal-build-11-4 \
         cuda-driver-devel-11-4 \
