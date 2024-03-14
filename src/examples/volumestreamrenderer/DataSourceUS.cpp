@@ -27,6 +27,7 @@
 #include <future>
 #include <list>
 #include <queue>
+#include <thread>
 
 namespace clara::viz
 {
