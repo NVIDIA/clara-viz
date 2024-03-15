@@ -252,17 +252,9 @@ public:
 
     inline void WriteString(std::vector<uint8_t> &buffer, const std::string &str)
     {
-        size_t idx = 0;
-        for (; idx < str.size(); ++idx)
-        {
-            buffer.push_back((uint8_t)str[idx]);
-        }
-
+        buffer.insert(buffer.end(), str.begin(), str.end());
         size_t size = static_cast<size_t>(GetStringSize(str));
-        for (; idx < size; ++idx)
-        {
-            buffer.push_back(0);
-        }
+        buffer.insert(buffer.end(), size - str.size(), 0);
     }
 
     inline void WriteString(std::vector<uint8_t> &buffer, const std::string &str, uint32_t size)
