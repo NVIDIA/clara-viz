@@ -521,8 +521,7 @@ bool NvEncVideoEncoder::Impl::CheckProfileGUID(const GUID &profile_guid)
         Log(LogLevel::Debug) << " " << guid;
     }
 
-    auto found_guid = std::find(guids.begin(), guids.end(), profile_guid);
-    return (found_guid != guids.end());
+    return std::binary_search(guids.begin(), guids.end(), profile_guid);
 }
 
 bool NvEncVideoEncoder::Impl::CheckRateControlMode(NV_ENC_PARAMS_RC_MODE rate_control_mode)

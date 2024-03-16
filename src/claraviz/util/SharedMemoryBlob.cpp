@@ -30,28 +30,28 @@ SharedMemoryBlob::SharedMemoryBlob(const std::shared_ptr<nvidia::sharedmemory::C
 
 std::unique_ptr<IBlob::AccessGuard> SharedMemoryBlob::Access()
 {
-    std::unique_ptr<Blob::AccessGuard> guard(new AccessGuard(this));
+    auto guard = std::make_unique<AccessGuardConst>(this);
     Blob::SyncAccess(guard.get());
     return guard;
 }
 
 std::unique_ptr<IBlob::AccessGuard> SharedMemoryBlob::Access(CUstream stream)
 {
-    std::unique_ptr<Blob::AccessGuard> guard(new AccessGuard(this));
+    auto guard = std::make_unique<AccessGuardConst>(this);
     Blob::SyncAccess(guard.get(), stream);
     return guard;
 }
 
 std::unique_ptr<IBlob::AccessGuardConst> SharedMemoryBlob::AccessConst()
 {
-    std::unique_ptr<Blob::AccessGuardConst> guard(new AccessGuardConst(this));
+    auto guard = std::make_unique<AccessGuardConst>(this);
     Blob::SyncAccessConst(guard.get());
     return guard;
 }
 
 std::unique_ptr<IBlob::AccessGuardConst> SharedMemoryBlob::AccessConst(CUstream stream)
 {
-    std::unique_ptr<Blob::AccessGuardConst> guard(new AccessGuardConst(this));
+    auto guard = std::make_unique<AccessGuardConst>(this);
     Blob::SyncAccessConst(guard.get(), stream);
     return guard;
 }

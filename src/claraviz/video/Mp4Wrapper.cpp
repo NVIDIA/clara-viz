@@ -232,9 +232,9 @@ public:
 
     inline void WriteAtomChildren(std::vector<uint8_t> &buffer)
     {
-        for (size_t idx = 0; idx < children_.size(); idx++)
+        for(auto &child: children_)
         {
-            children_[idx]->WriteAtom(buffer);
+            child->WriteAtom(buffer);
         }
     }
 
@@ -252,30 +252,20 @@ public:
 
     inline void WriteString(std::vector<uint8_t> &buffer, const std::string &str)
     {
-        size_t idx = 0;
-        for (; idx < str.size(); ++idx)
-        {
-            buffer.push_back((uint8_t)str[idx]);
-        }
-
+        buffer.insert(buffer.end(), str.begin(), str.end());
         size_t size = static_cast<size_t>(GetStringSize(str));
-        for (; idx < size; ++idx)
-        {
-            buffer.push_back(0);
-        }
+        buffer.insert(buffer.end(), size - str.size(), 0);
     }
 
     inline void WriteString(std::vector<uint8_t> &buffer, const std::string &str, uint32_t size)
     {
+        buffer.reserve(buffer.size() + size);
         size_t idx = 0;
         for (; idx < str.size() && idx < size; ++idx)
         {
             buffer.push_back((uint8_t)str[idx]);
         }
-        for (; idx < size; ++idx)
-        {
-            buffer.push_back(0);
-        }
+        buffer.insert(buffer.end(), size - idx, 0);
     }
 
     inline void WriteData(std::vector<uint8_t> &buffer, std::vector<uint8_t>::const_iterator begin,

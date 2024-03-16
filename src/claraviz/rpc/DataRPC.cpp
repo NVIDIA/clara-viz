@@ -611,10 +611,7 @@ void DataHistogramContext::ExecuteRPC(cinematic_v1::DataHistogramRequest &reques
     // copy histogram data to response
     google::protobuf::RepeatedField<float> *response_histogram = response.mutable_data();
     response_histogram->Reserve(histogram.size());
-    for (auto it = histogram.cbegin(); it != histogram.cend(); ++it)
-    {
-        response_histogram->Add(*it);
-    }
+    response_histogram->Assign(histogram.begin(), histogram.end());
 }
 
 } // namespace detail
