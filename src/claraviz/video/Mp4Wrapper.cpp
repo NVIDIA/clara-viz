@@ -232,9 +232,9 @@ public:
 
     inline void WriteAtomChildren(std::vector<uint8_t> &buffer)
     {
-        for (size_t idx = 0; idx < children_.size(); idx++)
+        for(auto &child: children_)
         {
-            children_[idx]->WriteAtom(buffer);
+            child->WriteAtom(buffer);
         }
     }
 
