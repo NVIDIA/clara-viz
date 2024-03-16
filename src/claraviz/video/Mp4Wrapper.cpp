@@ -259,15 +259,13 @@ public:
 
     inline void WriteString(std::vector<uint8_t> &buffer, const std::string &str, uint32_t size)
     {
+        buffer.reserve(buffer.size() + size);
         size_t idx = 0;
         for (; idx < str.size() && idx < size; ++idx)
         {
             buffer.push_back((uint8_t)str[idx]);
         }
-        for (; idx < size; ++idx)
-        {
-            buffer.push_back(0);
-        }
+        buffer.insert(buffer.end(), size - idx, 0);
     }
 
     inline void WriteData(std::vector<uint8_t> &buffer, std::vector<uint8_t>::const_iterator begin,
