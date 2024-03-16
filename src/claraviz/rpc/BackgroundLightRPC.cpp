@@ -50,35 +50,9 @@ void BackgroundLightContext::ExecuteRPC(cinematic_v1::BackgroundLightRequest &re
         access->bottom_color.Set(MakeVector3f(request.bottom_color()));
     }
 
-    switch (request.enable())
-    {
-    case nvidia::claraviz::core::SWITCH_ENABLE:
-        access->enable = true;
-        break;
-    case nvidia::claraviz::core::SWITCH_DISABLE:
-        access->enable = false;
-        break;
-    }
-
-    switch (request.show())
-    {
-    case nvidia::claraviz::core::SWITCH_ENABLE:
-        access->show = true;
-        break;
-    case nvidia::claraviz::core::SWITCH_DISABLE:
-        access->show = false;
-        break;
-    }
-
-    switch (request.cast_light())
-    {
-    case nvidia::claraviz::core::SWITCH_ENABLE:
-        access->cast_light = true;
-        break;
-    case nvidia::claraviz::core::SWITCH_DISABLE:
-        access->cast_light = false;
-        break;
-    }
+    access->enable = request.enable() == nvidia::claraviz::core::SWITCH_ENABLE;
+    access->show = request.show() == nvidia::claraviz::core::SWITCH_ENABLE;
+    access->cast_light = request.cast_light() == nvidia::claraviz::core::SWITCH_ENABLE;
 }
 
 } // namespace detail
