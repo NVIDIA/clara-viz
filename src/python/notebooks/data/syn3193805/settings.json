@@ -1,0 +1,903 @@
+{
+    "BackgroundLight": {
+        "bottomColor": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "castLight": true,
+        "enable": true,
+        "horizonColor": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        },
+        "intensity": 1.0,
+        "show": false,
+        "topColor": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+        }
+    },
+    "CameraAperture": {
+        "aperture": 0.005100000184029341,
+        "autoFocus": true,
+        "enable": true,
+        "focusDistance": 9.999999747378752e-06
+    },
+    "Cameras": [
+        {
+            "eye": {
+                "x": 0.2543959617614746,
+                "y": 0.2869194447994232,
+                "z": 0.7147179245948792
+            },
+            "fieldOfView": 30.0,
+            "lookAt": {
+                "x": -0.03195509314537048,
+                "y": 0.006501020863652229,
+                "z": -0.016047870740294456
+            },
+            "name": "Perspective",
+            "pixelAspectRatio": 1.0,
+            "up": {
+                "x": -0.11501682549715042,
+                "y": 0.9416680335998535,
+                "z": -0.31627899408340454
+            }
+        },
+        {
+            "eye": {
+                "x": 0.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "fieldOfView": 30.0,
+            "lookAt": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "name": "Top",
+            "pixelAspectRatio": 1.0,
+            "up": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0
+            }
+        },
+        {
+            "eye": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": -10.0
+            },
+            "fieldOfView": 30.0,
+            "lookAt": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "name": "Front",
+            "pixelAspectRatio": 1.0,
+            "up": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            }
+        },
+        {
+            "eye": {
+                "x": 10.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "fieldOfView": 30.0,
+            "lookAt": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "name": "Right",
+            "pixelAspectRatio": 1.0,
+            "up": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            }
+        },
+        {
+            "eye": {
+                "x": 0.0,
+                "y": 10.0,
+                "z": 0.0
+            },
+            "fieldOfView": 30.0,
+            "lookAt": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "name": "Oblique",
+            "pixelAspectRatio": 1.0,
+            "up": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0
+            }
+        }
+    ],
+    "DataCrop": {
+        "limits": [
+            {
+                "max": 1.0,
+                "min": 0.0
+            },
+            {
+                "max": 0.8899999856948853,
+                "min": 0.05999999865889549
+            },
+            {
+                "max": 1.0,
+                "min": 0.0
+            },
+            {
+                "max": 1.0,
+                "min": 0.18000000715255737
+            }
+        ]
+    },
+    "DataViews": [
+        {
+            "dataOffset": [],
+            "name": "",
+            "pixelAspectRatio": 1.0,
+            "viewOffset": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "zoomFactor": 1.0
+        }
+    ],
+    "Lights": [
+        {
+            "color": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "direction": {
+                "x": -0.36944353580474854,
+                "y": -0.870354413986206,
+                "z": -0.32556816935539246
+            },
+            "enable": true,
+            "intensity": 1.100000023841858,
+            "position": {
+                "x": 0.4000000059604645,
+                "y": 1.0,
+                "z": 0.8500000238418579
+            },
+            "show": true,
+            "size": 0.10000000149011612
+        },
+        {
+            "color": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "direction": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0
+            },
+            "enable": false,
+            "intensity": 1.0,
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": -1.0
+            },
+            "show": true,
+            "size": 1.0
+        },
+        {
+            "color": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "direction": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0
+            },
+            "enable": false,
+            "intensity": 1.0,
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": -1.0
+            },
+            "show": true,
+            "size": 1.0
+        },
+        {
+            "color": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "direction": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0
+            },
+            "enable": false,
+            "intensity": 1.0,
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": -1.0
+            },
+            "show": true,
+            "size": 1.0
+        }
+    ],
+    "PostProcessDenoise": {
+        "depthWeight": 3.0,
+        "enableIterationLimit": true,
+        "iterationLimit": 500,
+        "method": "AI",
+        "noiseThreshold": 0.009999999776482582,
+        "radius": 1,
+        "spatialWeight": 0.05000000074505806
+    },
+    "PostProcessTonemap": {
+        "enable": true,
+        "exposure": 0.5
+    },
+    "RenderSettings": {
+        "interpolationMode": "CATMULLROM",
+        "maxIterations": 1000,
+        "shadowStepSize": 1.0,
+        "stepSize": 1.0
+    },
+    "TransferFunction": {
+        "blendingProfile": "MAXIMUM_OPACITY",
+        "components": [
+            {
+                "activeRegions": [
+                    0
+                ],
+                "diffuseEnd": {
+                    "x": 1.0,
+                    "y": 0.8549019694328308,
+                    "z": 0.6980392336845398
+                },
+                "diffuseStart": {
+                    "x": 1.0,
+                    "y": 0.9647058844566345,
+                    "z": 0.9215686321258545
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 1.0,
+                "opacityProfile": "SQUARE",
+                "opacityTransition": 0.05999999865889549,
+                "range": {
+                    "max": 0.777999997138977,
+                    "min": 0.5210000276565552
+                },
+                "roughness": 9.800000190734863,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    1
+                ],
+                "diffuseEnd": {
+                    "x": 1.0,
+                    "y": 0.49803921580314636,
+                    "z": 0.0
+                },
+                "diffuseStart": {
+                    "x": 1.0,
+                    "y": 0.49803921580314636,
+                    "z": 0.0
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SQUARE",
+                "opacityTransition": 0.009999999776482582,
+                "range": {
+                    "max": 0.5989999771118164,
+                    "min": 0.4650000035762787
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    2
+                ],
+                "diffuseEnd": {
+                    "x": 0.8235294222831726,
+                    "y": 0.10588235408067703,
+                    "z": 0.6666666865348816
+                },
+                "diffuseStart": {
+                    "x": 0.8235294222831726,
+                    "y": 0.10588235408067703,
+                    "z": 0.6666666865348816
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SQUARE",
+                "opacityTransition": 0.0,
+                "range": {
+                    "max": 0.5989999771118164,
+                    "min": 0.47099998593330383
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    3
+                ],
+                "diffuseEnd": {
+                    "x": 0.8235294222831726,
+                    "y": 0.10588235408067703,
+                    "z": 0.6666666865348816
+                },
+                "diffuseStart": {
+                    "x": 0.8235294222831726,
+                    "y": 0.10588235408067703,
+                    "z": 0.6666666865348816
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SQUARE",
+                "opacityTransition": 0.0,
+                "range": {
+                    "max": 0.5789999961853027,
+                    "min": 0.4690000116825104
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    4
+                ],
+                "diffuseEnd": {
+                    "x": 0.8235294222831726,
+                    "y": 0.5686274766921997,
+                    "z": 0.09019608050584793
+                },
+                "diffuseStart": {
+                    "x": 0.8235294222831726,
+                    "y": 0.5686274766921997,
+                    "z": 0.09019608050584793
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SQUARE",
+                "opacityTransition": 0.0,
+                "range": {
+                    "max": 0.5989999771118164,
+                    "min": 0.4359999895095825
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    5
+                ],
+                "diffuseEnd": {
+                    "x": 1.0,
+                    "y": 0.1764705926179886,
+                    "z": 0.0313725508749485
+                },
+                "diffuseStart": {
+                    "x": 1.0,
+                    "y": 0.1764705926179886,
+                    "z": 0.0313725508749485
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SQUARE",
+                "opacityTransition": 0.0,
+                "range": {
+                    "max": 0.5139999985694885,
+                    "min": 0.3799999952316284
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    6
+                ],
+                "diffuseEnd": {
+                    "x": 1.0,
+                    "y": 0.0,
+                    "z": 0.29019609093666077
+                },
+                "diffuseStart": {
+                    "x": 1.0,
+                    "y": 0.0,
+                    "z": 0.29019609093666077
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SINE",
+                "opacityTransition": 0.18000000715255737,
+                "range": {
+                    "max": 1.0,
+                    "min": 0.4569999873638153
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    7
+                ],
+                "diffuseEnd": {
+                    "x": 0.49803921580314636,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "diffuseStart": {
+                    "x": 0.49803921580314636,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.3199999928474426,
+                "opacityProfile": "SINE",
+                "opacityTransition": 0.15000000596046448,
+                "range": {
+                    "max": 0.6119999885559082,
+                    "min": 0.12300000339746475
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    8
+                ],
+                "diffuseEnd": {
+                    "x": 1.0,
+                    "y": 0.8666666746139526,
+                    "z": 0.4941176474094391
+                },
+                "diffuseStart": {
+                    "x": 1.0,
+                    "y": 0.8666666746139526,
+                    "z": 0.4941176474094391
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SQUARE",
+                "opacityTransition": 0.0,
+                "range": {
+                    "max": 0.49399998784065247,
+                    "min": 0.4480000138282776
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    9
+                ],
+                "diffuseEnd": {
+                    "x": 1.0,
+                    "y": 0.0,
+                    "z": 0.40784314274787903
+                },
+                "diffuseStart": {
+                    "x": 1.0,
+                    "y": 0.0,
+                    "z": 0.40784314274787903
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SINE",
+                "opacityTransition": 0.1599999964237213,
+                "range": {
+                    "max": 0.5239999890327454,
+                    "min": 0.47099998593330383
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    10
+                ],
+                "diffuseEnd": {
+                    "x": 0.8941176533699036,
+                    "y": 0.5098039507865906,
+                    "z": 0.08627451211214066
+                },
+                "diffuseStart": {
+                    "x": 0.8941176533699036,
+                    "y": 0.5098039507865906,
+                    "z": 0.08627451211214066
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SQUARE",
+                "opacityTransition": 0.0,
+                "range": {
+                    "max": 0.5789999961853027,
+                    "min": 0.4790000021457672
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    11
+                ],
+                "diffuseEnd": {
+                    "x": 1.0,
+                    "y": 0.07450980693101883,
+                    "z": 0.0
+                },
+                "diffuseStart": {
+                    "x": 1.0,
+                    "y": 0.07450980693101883,
+                    "z": 0.0
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SQUARE",
+                "opacityTransition": 0.0,
+                "range": {
+                    "max": 0.5260000228881836,
+                    "min": 0.4429999887943268
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    12
+                ],
+                "diffuseEnd": {
+                    "x": 1.0,
+                    "y": 0.9333333373069763,
+                    "z": 0.0
+                },
+                "diffuseStart": {
+                    "x": 1.0,
+                    "y": 0.9333333373069763,
+                    "z": 0.0
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5099999904632568,
+                "opacityProfile": "SQUARE",
+                "opacityTransition": 0.0,
+                "range": {
+                    "max": 0.5339999794960022,
+                    "min": 0.3529999852180481
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            },
+            {
+                "activeRegions": [
+                    0
+                ],
+                "diffuseEnd": {
+                    "x": 1.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "diffuseStart": {
+                    "x": 1.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveEnd": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStart": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "emissiveStrength": 0.0,
+                "opacity": 0.5,
+                "opacityProfile": "SINE",
+                "opacityTransition": 0.0,
+                "range": {
+                    "max": 0.6620000004768372,
+                    "min": 0.4790000021457672
+                },
+                "roughness": 90.0,
+                "specularEnd": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                },
+                "specularStart": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "densityScale": 710.0,
+        "globalOpacity": 1.0,
+        "gradientScale": 110.0,
+        "hiddenRegions": [],
+        "shadingProfile": "HYBRID"
+    },
+    "Views": [
+        {
+            "cameraName": "Perspective",
+            "dataViewName": "",
+            "mode": "CINEMATIC",
+            "name": "",
+            "streamName": ""
+        }
+    ]
+}

@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2023, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2020-2024, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ endif()
 
 project(ClaraVizServer
     DESCRIPTION "ClaraVizServer"
-    VERSION 0.3.2
+    VERSION 0.4.0
     LANGUAGES CXX
 )
 
@@ -38,6 +38,7 @@ endif()
 if (CLARA_VIZ_WITH_GRPC)
     add_subdirectory(nvrpc)
     add_subdirectory(protos)
+    add_subdirectory(python)
 endif()
 
 add_subdirectory(claraviz)

@@ -1,0 +1,201 @@
+{
+    "BackgroundLight": {
+        "bottomColor": {
+            "x": 0.6666666666666666,
+            "y": 0.3333333333333333,
+            "z": 0
+        },
+        "enable": true,
+        "horizonColor": {
+            "x": 0.3137254901960784,
+            "y": 0.20784313725490197,
+            "z": 0.1568627450980392
+        },
+        "intensity": 1,
+        "topColor": {
+            "x": 0.11372549019607843,
+            "y": 0.39215686274509803,
+            "z": 1
+        }
+    },
+    "Cameras": [
+        {
+            "eye": {
+                "x": 0.35017122012061885,
+                "y": 0.3525218012517948,
+                "z": -0.10615013365018046
+            },
+            "fieldOfView": 35,
+            "lookAt": {
+                "x": 0.01022535361223548,
+                "y": 0.01636700553238844,
+                "z": 0.03718034025806895
+            },
+            "name": "Perspective",
+            "pixelAspectRatio": 1,
+            "up": {
+                "x": -0.17679359977678408,
+                "y": -0.22932811663674166,
+                "z": -0.9571586273956909
+            }
+        }
+    ],
+    "DataCrop": {
+        "limits": [
+            {
+                "max": 1,
+                "min": 0
+            },
+            {
+                "max": 0.8,
+                "min": 0.1
+            },
+            {
+                "max": 1,
+                "min": 0
+            },
+            {
+                "max": 1,
+                "min": 0
+            }
+        ]
+    },
+    "Lights": [
+        {
+            "color": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+            "direction": {
+                "x": -0.051945851961402514,
+                "y": -0.991185901636016,
+                "z": -0.12186934340514748
+            },
+            "enable": true,
+            "index": 0,
+            "intensity": 15.9359025938512,
+            "position": {
+                "x": 0.16871493258543924,
+                "y": 3.2192726899236166,
+                "z": 0.3958194404455785
+            },
+            "size": 0.6077
+        }
+    ],
+    "PostProcessDenoise": {
+        "depthWeight": 3,
+        "enableIterationLimit": true,
+        "iterationLimit": 1000,
+        "method": "AI",
+        "noiseThreshold": 0.01,
+        "radius": 1,
+        "spatialWeight": 0.05
+    },
+    "TransferFunction": {
+        "blendingProfile": "MAXIMUM_OPACITY",
+        "components": [
+            {
+                "activeRegions": [],
+                "diffuseEnd": {
+                    "x": 0.42745098039215684,
+                    "y": 0.3607843137254902,
+                    "z": 0.17254901960784313
+                },
+                "diffuseStart": {
+                    "x": 0.42745098039215684,
+                    "y": 0.3607843137254902,
+                    "z": 0.17254901960784313
+                },
+                "opacity": 0.4365158322401651,
+                "opacityProfile": "SQUARE",
+                "range": {
+                    "max": 0.5706850753644674,
+                    "min": 0.4917018007165803
+                },
+                "roughness": 0.3,
+                "specularEnd": {
+                    "x": 0.6862745098039216,
+                    "y": 0.6862745098039216,
+                    "z": 0.6862745098039216
+                },
+                "specularStart": {
+                    "x": 0.6862745098039216,
+                    "y": 0.6862745098039216,
+                    "z": 0.6862745098039216
+                }
+            },
+            {
+                "activeRegions": [],
+                "diffuseEnd": {
+                    "x": 0.7176470588235294,
+                    "y": 0.3411764705882353,
+                    "z": 0.07450980392156863
+                },
+                "diffuseStart": {
+                    "x": 0.5137254901960784,
+                    "y": 0.3411764705882353,
+                    "z": 0.0392156862745098
+                },
+                "opacity": 1,
+                "opacityProfile": "SQUARE",
+                "range": {
+                    "max": 0.327168819753315,
+                    "min": 0.176
+                },
+                "roughness": 0,
+                "specularEnd": {
+                    "x": 0.17254901960784313,
+                    "y": 0.17254901960784313,
+                    "z": 0.17254901960784313
+                },
+                "specularStart": {
+                    "x": 0.17254901960784313,
+                    "y": 0.17254901960784313,
+                    "z": 0.17254901960784313
+                }
+            },
+            {
+                "activeRegions": [],
+                "diffuseEnd": {
+                    "x": 0.30980392156862746,
+                    "y": 0.5294117647058824,
+                    "z": 0.1450980392156863
+                },
+                "diffuseStart": {
+                    "x": 0.38823529411764707,
+                    "y": 1,
+                    "z": 0
+                },
+                "opacity": 1,
+                "opacityProfile": "SQUARE",
+                "range": {
+                    "max": 0.27436797319001727,
+                    "min": 0.123
+                },
+                "roughness": 8.8,
+                "specularEnd": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                },
+                "specularStart": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                }
+            }
+        ],
+        "densityScale": 100,
+        "globalOpacity": 1,
+        "gradientScale": 200,
+        "shadingProfile": "HYBRID"
+    },
+    "Views": [
+        {
+            "name": "",
+            "cameraName": "Perspective",
+            "mode": "CINEMATIC"
+        }
+    ]
+}

@@ -107,12 +107,12 @@ endif()
 # Import target "clara::viz::renderer" for configuration "Release"
 set_property(TARGET clara::viz::renderer APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(clara::viz::renderer PROPERTIES
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/${CMAKE_SYSTEM_PROCESSOR}/libclara_viz_renderer.so.0.3.2"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/${CMAKE_SYSTEM_PROCESSOR}/libclara_viz_renderer.so.0.4.0"
   IMPORTED_SONAME_RELEASE "libclara_viz_renderer.so.0"
   )
 
 list(APPEND _cmake_import_check_targets clara::viz::renderer )
-list(APPEND _cmake_import_check_files_for_clara::viz::renderer "${_IMPORT_PREFIX}/lib/${CMAKE_SYSTEM_PROCESSOR}/libclara_viz_renderer.so.0.3.2" )
+list(APPEND _cmake_import_check_files_for_clara::viz::renderer "${_IMPORT_PREFIX}/lib/${CMAKE_SYSTEM_PROCESSOR}/libclara_viz_renderer.so.0.4.0" )
 
 # Cleanup temporary variables.
 set(_IMPORT_PREFIX)

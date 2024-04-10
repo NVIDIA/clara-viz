@@ -9,8 +9,8 @@ build*/*
 **/video.mp4
 
 # notebooks
-python/notebooks/HelloWorld.jpg
-python/notebooks/data/bonsai/*.nhdr
-python/notebooks/data/bonsai/*.raw
-python/notebooks/data/pancreas/*.raw
-python/notebooks/data/OpenSlide/*.tiff
+src/python/notebooks/HelloWorld.jpg
+src/python/notebooks/data/bonsai/*.nhdr
+src/python/notebooks/data/bonsai/*.raw
+src/python/notebooks/data/pancreas/*.raw
+src/python/notebooks/data/OpenSlide/*.tiff

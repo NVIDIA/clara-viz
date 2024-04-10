@@ -1,0 +1,21 @@
+graft clara-viz-widgets/nbextension
+graft clara-viz-widgets/labextension
+
+graft js
+graft tests
+prune **/node_modules
+
+include clara-viz-widgets.json
+include clara/viz/widgets/VERSION
+
+include LICENSE
+include setup.py
+include install.json
+
+# Patterns to exclude from any directory
+global-exclude *~
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude .git
+global-exclude .ipynb_checkpoints
+global-exclude *.map
