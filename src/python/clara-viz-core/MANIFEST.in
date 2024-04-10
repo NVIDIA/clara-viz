@@ -1,0 +1,11 @@
+include clara/viz/core/VERSION
+
+include LICENSE
+include setup.py
+
+# Patterns to exclude from any directory
+global-exclude *~
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude .git
+global-exclude *.map

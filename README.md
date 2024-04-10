@@ -54,7 +54,9 @@ docker run --network host --rm -it -u $(id -u):$(id -g) -v $PWD:/ClaraViz \
 git
 git-lfs
 nasm
-CMake 3.19.1
+CMake 3.24.0
+python3-dev
+python3-distutils
 
 #### Build
 

@@ -319,7 +319,11 @@ const NV_ENCODE_API_FUNCTION_LIST &NvEncService::GetApi() const
 
 NVENCSTATUS NvEncDestroyEncoder(void *encoder)
 {
-    return NvEncService::GetInstance().GetApi().nvEncDestroyEncoder(encoder);
+    if (encoder)
+    {
+        return NvEncService::GetInstance().GetApi().nvEncDestroyEncoder(encoder);
+    }
+    return NV_ENC_SUCCESS;
 }
 
 } // namespace clara::viz

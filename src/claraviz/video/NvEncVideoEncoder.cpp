@@ -288,6 +288,10 @@ private:
 NvEncVideoEncoder::NvEncVideoEncoder(uint32_t cuda_device_ordinal)
     : impl_(new Impl(cuda_device_ordinal))
 {
+    if (!Query(IVideoEncoder::Capability::IS_SUPPORTED))
+    {
+        throw RuntimeError() << "HW accelerated video encoding not supported";
+    }
 }
 
 NvEncVideoEncoder::~NvEncVideoEncoder() {}

@@ -1,3 +1,17 @@
+# clara-viz 0.4.0 (April 10 2024)
+
+## Features
+
+* Add Python and pybind11 source code
+* Add support for Python 3.10 and 3.11 packages and set Python wheel requirement to fail installation on unsupported Python versions
+
+## Bug Fixes
+
+* Add missing <thread> include to DataSourceUS.cpp ([32](https://github.com/NVIDIA/clara-viz/pull/32)) [@thewtex](https://github.com/thewtex)
+* Upgrade almalinux-release in Docker build for GPG keys ([31](https://github.com/NVIDIA/clara-viz/pull/32)) [@thewtex](https://github.com/thewtex)
+* Gracefully disable OptiX and NvENC features if initialization fails.
+* Python: Fix segfault when accessing RGBA data of rendered image ([33](https://github.com/NVIDIA/clara-viz/issues/33)) [@thewtex](https://github.com/thewtex)
+
 # clara-viz 0.3.2 (November 27 2023)
 
 ## Features

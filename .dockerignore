@@ -1,4 +1,4 @@
-python/notebooks/*
+src/python/notebooks/*
 **/build
 **/data
 **/node_modules

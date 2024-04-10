@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2023, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2019-2024, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,12 +19,13 @@ FROM ${DOCKER_HUB}nvidia/cuda:11.2.2-devel-ubuntu18.04
 #  * wget, ca-certificates: to download packages
 #  * build-essential: for building code
 #  * git: used by cmake to clone git projects
+#  * python3-dev, python3-distutils: for ClaraViz python backend
 #  * nasm: used by openh264
 #  * libx11-dev: used by 'claravizrenderer-ui' example
 RUN apt-get update \
     && apt-get upgrade -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        wget ca-certificates build-essential git nasm libx11-dev \
+        wget ca-certificates build-essential git python3-dev python3-distutils nasm libx11-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install git-lfs to be used by cmake

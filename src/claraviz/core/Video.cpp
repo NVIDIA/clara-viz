@@ -232,10 +232,19 @@ std::unique_ptr<IVideoEncoder> Video::Impl::CreateEncoder() const
 {
     std::unique_ptr<IVideoEncoder> encoder;
 
-    encoder.reset(new NvEncVideoEncoder(cuda_device_ordinal_));
-    if (!encoder->Query(IVideoEncoder::Capability::IS_SUPPORTED))
+    try
+    {
+        encoder.reset(new NvEncVideoEncoder(cuda_device_ordinal_));
+    }
+    catch (const std::exception& e)
+    {
+        Log(LogLevel::Warning) << "Failed to create NvEnc video encoder";
+    }
+
+    if (!encoder)
     {
 #ifdef CLARA_VIZ_WITH_OPENH264
+        Log(LogLevel::Warning) << "Falling back to CPU based video encoding";
         encoder.reset(new OpenH264VideoEncoder(cuda_device_ordinal_));
         if (!encoder->Query(IVideoEncoder::Capability::IS_SUPPORTED))
 #endif

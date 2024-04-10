@@ -34,7 +34,7 @@ enum class ColorImageType
      */
     UNKNOWN,
     /**
-     * RAW uncompressed RGB unsigned int 8-bit with unused unsigned int 8-bit
+     * RAW uncompressed RGBA unsigned int 8-bit
      * This is a word-ordered format where a pixel is represented by a 32-bit word with R
      * in the lowest 8 bits, G in the next 8 bits, B in the
      * 8 bits after that and A in the highest 8 bits.
