@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2023, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2019-2025, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ set(PROJECT_NAME ExampleRenderServer)
 find_package(gRPC REQUIRED CONFIG)
 find_package(CudaHelper REQUIRED CONFIG)
 
-set(CUDA_LINK_LIBRARIES_KEYWORD INTERFACE)
-find_package(CUDA REQUIRED)
 enable_language(CUDA)
 
 add_executable(${PROJECT_NAME})

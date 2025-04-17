@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2024, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2019-2025, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ FROM ${DOCKER_HUB}pypa/manylinux_2_28_x86_64:2023-03-20-098e33d
 # Install the Cuda toolkit
 #  - use gcc-10 since gcc-12 is not supported by CUDA 11.4
 RUN dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel8/x86_64/cuda-rhel8.repo \
+    && rpm --import https://repo.almalinux.org/almalinux/RPM-GPG-KEY-AlmaLinux \
     && dnf upgrade -y almalinux-release \
     && dnf install -y \
         cuda-minimal-build-11-4 \
@@ -33,11 +34,14 @@ ENV PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
 # Install dependencies
+#  * cmake: to download packages
 #  * wget: to download packages
 #  * git: used by cmake to clone git projects
 #  * nasm: used by openh264
 #  * libX11-devel: used by 'claravizrenderer-ui' example
-RUN dnf install -y wget git nasm libX11-devel \
+ARG CMAKE_VERSION="3.24.0"
+RUN pipx install --force cmake==${CMAKE_VERSION} \
+    && dnf install -y wget git nasm libX11-devel \
     && dnf clean all \
     && rm -rf /var/cache/dnf
 

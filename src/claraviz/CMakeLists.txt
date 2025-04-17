@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2023, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2018-2025, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -96,26 +96,20 @@ set(PROJECT_NAME clara_viz_core_hw)
 add_library(${PROJECT_NAME} STATIC)
 add_library(clara::viz::core::hw ALIAS ${PROJECT_NAME})
 
-find_package(CUDA REQUIRED) # for find_cuda_helper_libs
 find_package(CUDAToolkit REQUIRED)
 find_package(nvsharedmemory CONFIG)
 find_package(ZLIB)
 
-# nvidia-docker is not mapping nvjpeg into the image, prefer to link statically
-find_cuda_helper_libs(nvjpeg_static)
-if(CUDA_nvjpeg_static_LIBRARY)
+if(TARGET CUDA::nvjpeg_static)
     message(STATUS "Found static nvjpeg lib")
     set(nvjpeg_LIB CUDA::nvjpeg_static)
     set(nvjpeg_FOUND TRUE)
+elseif(TARGET CUDA::nvjpeg)
+    message(STATUS "Found shared nvjpeg lib")
+    set(nvjpeg_LIB CUDA::nvjpeg)
+    set(nvjpeg_FOUND TRUE)
 else()
-    find_cuda_helper_libs(nvjpeg)
-    if(CUDA_nvjpeg_LIBRARY)
-        message(STATUS "Found shared nvjpeg lib")
-        set(nvjpeg_LIB CUDA::nvjpeg)
-        set(nvjpeg_FOUND TRUE)
-    else()
-        message(NOTICE "Could not find nvjpeg lib (neither shared nor static), JPEG encdoing support disabled")
-    endif()
+    message(NOTICE "Could not find nvjpeg lib (neither shared nor static), JPEG encdoing support disabled")
 endif()
 
 enable_language(CUDA)

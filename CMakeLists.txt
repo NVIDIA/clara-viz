@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2024, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2020-2025, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cmake_minimum_required(VERSION 3.24...3.26)
+cmake_minimum_required(VERSION 3.24...4.0)
 
 # Options
 option(CLARA_VIZ_CUDA_PROFILING "Enable CUDA profiling" OFF)
@@ -25,7 +25,7 @@ include(ExternalProject)
 
 project(ClaraViz
     DESCRIPTION "ClaraViz"
-    VERSION 0.4.0
+    VERSION 0.4.1
     LANGUAGES CXX
 )
 
