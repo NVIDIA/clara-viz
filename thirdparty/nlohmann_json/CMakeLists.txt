@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2023, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2020-2025, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,11 +23,6 @@ FetchContent_Declare(
     DOWNLOAD_EXTRACT_TIMESTAMP True
 )
 set(JSON_BuildTests OFF CACHE INTERNAL "")
-set(JSON_Install OFF)
+set(JSON_Install OFF CACHE INTERNAL "")
 
-FetchContent_GetProperties(nlohmann_json)
-if(NOT nlohmann_json_POPULATED)
-  FetchContent_Populate(nlohmann_json)
-  # add 'EXCLUDE_FROM_ALL' to avoid the install step
-  add_subdirectory(${nlohmann_json_SOURCE_DIR} ${nlohmann_json_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif()
+FetchContent_MakeAvailable(nlohmann_json)

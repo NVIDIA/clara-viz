@@ -1,4 +1,4 @@
-# Copyright (c) 2023, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2023-2025, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ if(CMAKE_VERSION VERSION_LESS "2.8.3")
    message(FATAL_ERROR "CMake >= 2.8.3 required")
 endif()
 cmake_policy(PUSH)
-cmake_policy(VERSION 2.8.3...3.24)
+cmake_policy(VERSION 2.8.3...4.0)
 
 
 ####### Expanded from @PACKAGE_INIT@ by configure_package_config_file() #######
@@ -107,12 +107,12 @@ endif()
 # Import target "clara::viz::renderer" for configuration "Release"
 set_property(TARGET clara::viz::renderer APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(clara::viz::renderer PROPERTIES
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/${CMAKE_SYSTEM_PROCESSOR}/libclara_viz_renderer.so.0.4.0"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/${CMAKE_SYSTEM_PROCESSOR}/libclara_viz_renderer.so.0.4.1"
   IMPORTED_SONAME_RELEASE "libclara_viz_renderer.so.0"
   )
 
 list(APPEND _cmake_import_check_targets clara::viz::renderer )
-list(APPEND _cmake_import_check_files_for_clara::viz::renderer "${_IMPORT_PREFIX}/lib/${CMAKE_SYSTEM_PROCESSOR}/libclara_viz_renderer.so.0.4.0" )
+list(APPEND _cmake_import_check_files_for_clara::viz::renderer "${_IMPORT_PREFIX}/lib/${CMAKE_SYSTEM_PROCESSOR}/libclara_viz_renderer.so.0.4.1" )
 
 # Cleanup temporary variables.
 set(_IMPORT_PREFIX)

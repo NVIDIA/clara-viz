@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2023, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2019-2025, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ find_package(grpc-web REQUIRED CONFIG)
 find_package(clara_viz_renderer REQUIRED)
 
 set(CUDA_LINK_LIBRARIES_KEYWORD INTERFACE)
-find_package(CUDA REQUIRED)
+find_package(CUDAToolkit REQUIRED)
 enable_language(CUDA)
 
 add_executable(${PROJECT_NAME})
@@ -69,9 +69,10 @@ target_link_libraries(${PROJECT_NAME}
         clara::viz::core::hw
         clara::viz::core::grpc
         clara::viz::renderer
-        ${CUDA_CUDA_LIBRARY}
         # for std::experimental::filesystem on GCC, can be removed when we use GCC 8
         -lstdc++fs
+
+        CUDA::cuda_driver
     )
 
 install(TARGETS ${PROJECT_NAME}

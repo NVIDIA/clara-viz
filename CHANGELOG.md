@@ -1,3 +1,18 @@
+# clara-viz 0.4.1 (April 16 2025)
+
+## Features
+
+* Add support CMake 4.0
+* Add support for Python 3.12 packages, remove 3.6, 3.7 and 3.8 which are end of life
+
+## Bug Fixes
+
+* AlmaLinux 8 GPG key update (https://almalinux.org/blog/2023-12-20-almalinux-8-key-update/)
+
+## Security
+
+* Update packages to fix vulnerabilities
+
 # clara-viz 0.4.0 (April 10 2024)
 
 ## Features

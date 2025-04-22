@@ -1,4 +1,4 @@
-# Copyright (c) 2024, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2024-2025, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,39 +19,68 @@ find_package(OpenH264 REQUIRED CONFIG)
 find_package(CUDAToolkit REQUIRED)
 find_package(clara_viz_renderer REQUIRED)
 
-# pybind11
-FetchContent_Declare(
-    pybind11
-    GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG v2.11.1
-    GIT_SHALLOW TRUE
-)
+if(CMAKE_VERSION VERSION_LESS 3.28.0)
+    # pybind11
+    FetchContent_Declare(
+        pybind11
+        GIT_REPOSITORY https://github.com/pybind/pybind11.git
+        GIT_TAG v2.13.6
+        GIT_SHALLOW TRUE
+    )
 
-FetchContent_GetProperties(pybind11)
-if(NOT pybind11_POPULATED)
-  FetchContent_Populate(pybind11)
-  # add 'EXCLUDE_FROM_ALL' to avoid the install step
-  add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif()
+    FetchContent_GetProperties(pybind11)
+    if(NOT pybind11_POPULATED)
+        FetchContent_Populate(pybind11)
+        # add 'EXCLUDE_FROM_ALL' to avoid the install step
+        add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR} EXCLUDE_FROM_ALL)
+    endif()
 
-# nlohmann json
-add_subdirectory(${nlohmann_json_SOURCE_DIR} ${nlohmann_json_BINARY_DIR} EXCLUDE_FROM_ALL)
+    # nlohmann json
+    add_subdirectory(${nlohmann_json_SOURCE_DIR} ${nlohmann_json_BINARY_DIR} EXCLUDE_FROM_ALL)
 
-# order is important, include pybind11 and json before pybind11_json
+    # order is important, include pybind11 and json before pybind11_json
 
-# pybind11 json
-FetchContent_Declare(
-    pybind11_json
-    GIT_REPOSITORY https://github.com/pybind/pybind11_json.git
-    GIT_TAG 0.2.11
-    GIT_SHALLOW TRUE
-)
+    FetchContent_Declare(
+        pybind11_json
+        GIT_REPOSITORY https://github.com/pybind/pybind11_json.git
+        GIT_TAG 0.2.15
+        GIT_SHALLOW TRUE
+    )
 
-FetchContent_GetProperties(pybind11_json)
-if(NOT pybind11_json_POPULATED)
-  FetchContent_Populate(pybind11_json)
-  # add 'EXCLUDE_FROM_ALL' to avoid the install step
-  add_subdirectory(${pybind11_json_SOURCE_DIR} ${pybind11_json_BINARY_DIR} EXCLUDE_FROM_ALL)
+    FetchContent_GetProperties(pybind11_json)
+    if(NOT pybind11_json_POPULATED)
+        FetchContent_Populate(pybind11_json)
+        # add 'EXCLUDE_FROM_ALL' to avoid the install step
+        add_subdirectory(${pybind11_json_SOURCE_DIR} ${pybind11_json_BINARY_DIR} EXCLUDE_FROM_ALL)
+    endif()
+else()
+    # pybind11
+    FetchContent_Declare(
+        pybind11
+        GIT_REPOSITORY https://github.com/pybind/pybind11.git
+        GIT_TAG v2.13.6
+        GIT_SHALLOW TRUE
+        # add 'EXCLUDE_FROM_ALL' to avoid the install step
+        EXCLUDE_FROM_ALL
+    )
+    FetchContent_MakeAvailable(pybind11)
+
+    # nlohmann json
+    add_subdirectory(${nlohmann_json_SOURCE_DIR} ${nlohmann_json_BINARY_DIR} EXCLUDE_FROM_ALL)
+
+    # order is important, include pybind11 and json before pybind11_json
+
+    # pybind11 json
+    FetchContent_Declare(
+        pybind11_json
+        GIT_REPOSITORY https://github.com/pybind/pybind11_json.git
+        GIT_TAG 0.2.15
+        GIT_SHALLOW TRUE
+        # add 'EXCLUDE_FROM_ALL' to avoid the install step
+        EXCLUDE_FROM_ALL
+    )
+
+    FetchContent_MakeAvailable(pybind11_json)
 endif()
 
 pybind11_add_module(${PROJECT_NAME}
