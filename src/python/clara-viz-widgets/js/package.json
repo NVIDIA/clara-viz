@@ -1,6 +1,6 @@
 {
   "name": "clara-viz-widgets",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A Jupyter Widget for interactive rendering with Clara Viz.",
   "author": "Andreas Heumann",
   "license": "Apache License 2.0",

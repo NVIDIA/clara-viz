@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2023, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2019-2025, NVIDIA CORPORATION. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,10 +26,10 @@ macro(setup_project)
     # use the stub libs instead of real binaries, with that building in docker without using the nvidia runtime works
     set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /usr/local/cuda/lib64/stubs)
 
-    # Generate code for multiple architectures, if we don't do this the JIT compiler will compile SM specific
-    # code from the embedded PTX code. This will increase program startup times.
-    # Pascal (60, 61), Volta (70), Turing (75), Ampere (80)
-    set(CMAKE_CUDA_ARCHITECTURES 60-real 61-real 70-real 75-real 80)
+    # Compile for all supported major real architectures, and the highest major virtual architecture.
+    set(CMAKE_CUDA_ARCHITECTURES "all-major")
+    # Suppress deprecated GPU targets warnings
+    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Wno-deprecated-gpu-targets")
 
     set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --use_fast_math")
     # allow calling constexpr host function from device code and vice versa, used to call std::numeric_limits functions from device

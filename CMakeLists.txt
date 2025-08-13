@@ -25,7 +25,7 @@ include(ExternalProject)
 
 project(ClaraViz
     DESCRIPTION "ClaraViz"
-    VERSION 0.4.1
+    VERSION 0.4.2
     LANGUAGES CXX
 )
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, NVIDIA CORPORATION. All rights reserved.
+ * Copyright (c) 2018-2025, NVIDIA CORPORATION. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <sstream>
 #include <stdexcept>
 
@@ -24,12 +25,12 @@ namespace clara::viz
 
 /**
  * Templated exception class to extend std exceptions.
- * 
+ *
  * Supports building a message using '<<' operators, e.g.
  * @code{.cpp}
  * throw Exception() << Object " << object << "unexpected";
  * @endcode
- * 
+ *
  * @todo Very similar to Log class, define common string stream class? Or inherit
  *       from std::ostream?
  * @todo Would like to use std::ostringstream but this returns a temporary string and what()
@@ -42,7 +43,7 @@ class Exception : public StdExceptionClass
 public:
     /**
      * Construct
-     * 
+     *
      * @param filename [in] name of the file where the exception had been thrown
      * @param line [in] line number where the exception had been thrown
      */
@@ -60,7 +61,7 @@ public:
 
     /**
      * Construct with message
-     * 
+     *
      * @param filename [in] name of the file where the exception had been thrown
      * @param line [in] line number where the exception had been thrown
      * @param which [in] message to output
