@@ -1,3 +1,15 @@
+# clara-viz 0.4.2 (August 13 2025)
+
+## Features
+
+* Add support for CUDA 13.0
+
+## Bug Fixes
+
+* Fix GCC 13.0 build error
+
+## Security
+
 # clara-viz 0.4.1 (April 16 2025)
 
 ## Features

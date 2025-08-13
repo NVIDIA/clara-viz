@@ -144,7 +144,11 @@ public:
             CUdevice device;
             CudaCheck(cuDeviceGet(&device, device_ordinal));
             CUcontext context;
+#if CUDA_VERSION >= 13000
+            CudaCheck(cuCtxCreate(&context, nullptr, 0, device));
+#else
             CudaCheck(cuCtxCreate(&context, 0, device));
+#endif
             CUcontext popped_context;
             CudaCheck(cuCtxPopCurrent(&popped_context));
             if (popped_context != context)

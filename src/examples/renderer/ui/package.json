@@ -1,6 +1,6 @@
 {
   "name": "claraviz-example",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "RenderServer example",
   "dependencies": {
     "@grpc/proto-loader": "^0.6.9",
