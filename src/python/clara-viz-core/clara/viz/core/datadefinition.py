@@ -245,7 +245,7 @@ class DataDefinition():
                     if (self._img.spacing_units()[0] == "micrometer"):
                         downsamples /= 1000
                     else:
-                        print(f"Unhandled spacing units {self._img.spacing_units[0]}, using millimeter")
+                        print(f"Unhandled spacing units {self._img.spacing_units()[0]}, using millimeter")
 
                 # scale spacing (exclude color dimension)
                 for index in range(self._img.ndim - 1):
