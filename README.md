@@ -1,5 +1,7 @@
 # Clara Viz
 
+> **Archived:** This repository is archived and no longer actively maintained. It is read-only, and no new issues, pull requests, or releases are expected. The code remains available under the Apache-2.0 license.
+
 NVIDIA Clara Viz is a platform for visualization of 2D/3D medical imaging data. It enables building applications
 that leverage powerful volumetric visualization using CUDA-based ray tracing. It also allows viewing of multi resolution
 images used in digital pathology.
